@@ -1,0 +1,2166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git Hedros — Console Git Profissional</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='0' y='0' width='16' height='32' fill='%23FF5E13'/%3E%3Crect x='16' y='0' width='16' height='32' fill='%230077D4'/%3E%3Cg stroke='%23FFFFFF' stroke-width='4' fill='none' stroke-linecap='round'%3E%3Cpath d='M10 8v16'/%3E%3Cpath d='M22 8v16'/%3E%3Cpath d='M10 16h12'/%3E%3C/g%3E%3C/svg%3E">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    :root {
+      /* Paleta Oficial Hedros */
+      --laranja: #FF5E13;
+      --laranja-hover: #ff7434;
+      --laranja-glow: rgba(255, 94, 19, 0.35);
+      --laranja-bg: rgba(255, 94, 19, 0.12);
+      --laranja-border: rgba(255, 94, 19, 0.45);
+
+      --azul: #0077D4;
+      --azul-hover: #1a8ae0;
+      --azul-glow: rgba(0, 119, 212, 0.35);
+      --azul-bg: rgba(0, 119, 212, 0.12);
+      --azul-border: rgba(0, 119, 212, 0.45);
+
+      --roxo: #a855f7;
+      --roxo-hover: #c084fc;
+      --roxo-glow: rgba(168, 85, 247, 0.35);
+      --roxo-bg: rgba(168, 85, 247, 0.12);
+      --roxo-border: rgba(168, 85, 247, 0.45);
+
+      --verde: #10b981;
+      --verde-bg: rgba(16, 185, 129, 0.12);
+      --verde-border: rgba(16, 185, 129, 0.45);
+
+      --branco: #FFFFFF;
+      --carvao: #1C2026;
+      --petroleo: #0E141B;
+
+      --bg-base: #0a0e14;
+      --card-bg: rgba(22, 28, 36, 0.85);
+      --card-bg-elev: rgba(28, 36, 46, 0.9);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-hover: rgba(255, 255, 255, 0.2);
+
+      --text: #f4f6f9;
+      --text-dim: #9aa5b5;
+      --text-faint: #596575;
+
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.12);
+      --danger-border: rgba(239, 68, 68, 0.4);
+
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 10% 0%, rgba(0, 119, 212, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 90% 10%, rgba(255, 94, 19, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 50% 100%, rgba(14, 20, 27, 0.9) 0%, transparent 70%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("Logo Full.jpg") center / cover no-repeat;
+      opacity: 0.16;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header, main, #toast, .modal-overlay {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 8px 24px;
+      height: 60px;
+      background: rgba(14, 20, 27, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      flex-shrink: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-hero {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-logo-hero img {
+      height: 100%;
+      width: auto;
+      max-width: 150px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 12px var(--laranja-glow)) drop-shadow(0 0 6px var(--azul-glow));
+      transition: transform 0.3s ease;
+    }
+
+    .brand-text h1 {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-text h1 span.logo-blue { color: var(--azul); }
+    .brand-text h1 span.logo-orange { color: var(--laranja); }
+    .brand-text h1 span.badge-pro {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--azul), var(--laranja));
+      color: #fff;
+      margin-left: 2px;
+    }
+
+    /* SELETOR DE VERSÕES / MODOS (TABS NO TOPO) */
+    .mode-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(10, 14, 20, 0.85);
+      border: 1px solid var(--card-border);
+      padding: 4px;
+      border-radius: 30px;
+    }
+
+    .btn-mode {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-dim);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+
+    .btn-mode:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-mode.active[data-mode="basic"] {
+      background: var(--verde-bg);
+      border-color: var(--verde-border);
+      color: #34d399;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+    }
+
+    .btn-mode.active[data-mode="inter"] {
+      background: var(--azul-bg);
+      border-color: var(--azul-border);
+      color: #90cdf4;
+      box-shadow: 0 0 12px rgba(0, 119, 212, 0.25);
+    }
+
+    .btn-mode.active[data-mode="adv"] {
+      background: var(--roxo-bg);
+      border-color: var(--roxo-border);
+      color: #d8b4fe;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--card-border);
+      background: rgba(28, 32, 38, 0.85);
+      backdrop-filter: blur(8px);
+      user-select: none;
+      transition: all 0.3s ease;
+    }
+
+    .status-pill .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-faint);
+    }
+
+    .status-pill .branch-info {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      color: #90cdf4;
+      font-weight: 600;
+      padding-left: 6px;
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .status-pill.online {
+      color: #fff;
+      border-color: var(--laranja-border);
+      box-shadow: 0 0 12px rgba(255, 94, 19, 0.2);
+    }
+    .status-pill.online .dot {
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseGlow 2s infinite;
+    }
+
+    .status-pill.offline {
+      color: var(--danger);
+      border-color: var(--danger-border);
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.15);
+    }
+    .status-pill.offline .dot {
+      background: var(--danger);
+      box-shadow: 0 0 8px var(--danger);
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.15); }
+    }
+
+    /* ===== MAIN LAYOUT (FITS STRICTLY 100VH ON 16:9) ===== */
+    main {
+      flex: 1;
+      height: calc(100vh - 60px);
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1.18fr 0.92fr;
+      gap: 16px;
+      padding: 12px 24px;
+      max-width: 1680px;
+      width: 100%;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .panel {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    }
+
+    /* CONTAINERS DE VISUALIZAÇÃO POR MODO */
+    .mode-view {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeInView 0.2s ease;
+    }
+    .mode-view.active-view {
+      display: flex;
+    }
+    @keyframes fadeInView {
+      from { opacity: 0; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-weight: 700;
+      color: var(--text-dim);
+    }
+
+    .section-title span.bar-orange {
+      width: 3px; height: 12px; border-radius: 2px;
+      background: var(--laranja);
+      box-shadow: 0 0 6px var(--laranja);
+    }
+
+    .section-title span.bar-blue {
+      width: 3px; height: 12px; border-radius: 2px;
+      background: var(--azul);
+      box-shadow: 0 0 6px var(--azul);
+    }
+
+    .section-title span.bar-green {
+      width: 3px; height: 12px; border-radius: 2px;
+      background: var(--verde);
+      box-shadow: 0 0 6px var(--verde);
+    }
+
+    .section-title span.bar-purple {
+      width: 3px; height: 12px; border-radius: 2px;
+      background: var(--roxo);
+      box-shadow: 0 0 6px var(--roxo);
+    }
+
+    .section-title span.bar-red {
+      width: 3px; height: 12px; border-radius: 2px;
+      background: var(--danger);
+      box-shadow: 0 0 6px var(--danger);
+    }
+
+    /* GRID DE BOTÕES */
+    .grid-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+      gap: 8px;
+    }
+
+    button.btn-action {
+      background: var(--card-bg-elev);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 8px 11px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      text-align: left;
+      z-index: 1;
+    }
+
+    button.btn-action span.btn-ico {
+      font-size: 14px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    button.btn-action:hover {
+      background: rgba(40, 50, 65, 0.95);
+      border-color: var(--card-border-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+
+    button.btn-action:active {
+      transform: translateY(0);
+    }
+
+    /* Variações de Botão */
+    button.btn-action.btn-orange {
+      background: var(--laranja-bg);
+      border-color: var(--laranja-border);
+      color: #ffe6d9;
+    }
+    button.btn-action.btn-orange:hover {
+      background: rgba(255, 94, 19, 0.22);
+      border-color: var(--laranja);
+      box-shadow: 0 0 12px rgba(255, 94, 19, 0.3);
+    }
+
+    button.btn-action.btn-blue {
+      background: var(--azul-bg);
+      border-color: var(--azul-border);
+      color: #e0f2fe;
+    }
+    button.btn-action.btn-blue:hover {
+      background: rgba(0, 119, 212, 0.22);
+      border-color: var(--azul);
+      box-shadow: 0 0 12px rgba(0, 119, 212, 0.3);
+    }
+
+    button.btn-action.btn-green {
+      background: var(--verde-bg);
+      border-color: var(--verde-border);
+      color: #d1fae5;
+    }
+    button.btn-action.btn-green:hover {
+      background: rgba(16, 185, 129, 0.22);
+      border-color: var(--verde);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+    }
+
+    button.btn-action.btn-purple {
+      background: var(--roxo-bg);
+      border-color: var(--roxo-border);
+      color: #f3e8ff;
+    }
+    button.btn-action.btn-purple:hover {
+      background: rgba(168, 85, 247, 0.22);
+      border-color: var(--roxo);
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+    }
+
+    button.btn-action.btn-danger {
+      background: var(--danger-bg);
+      border-color: var(--danger-border);
+      color: #fecaca;
+    }
+    button.btn-action.btn-danger:hover {
+      background: rgba(239, 68, 68, 0.22);
+      border-color: var(--danger);
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+    }
+
+    /* INPUTS & FORM GROUPS */
+    .input-group {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    input.input-pro {
+      flex: 1;
+      background: rgba(10, 14, 20, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: var(--font-sans);
+      transition: all 0.15s ease;
+    }
+
+    input.input-pro:focus {
+      outline: none;
+      border-color: var(--laranja);
+      box-shadow: 0 0 0 2px rgba(255, 94, 19, 0.18);
+      background: rgba(14, 20, 27, 0.95);
+    }
+
+    input.input-pro::placeholder {
+      color: var(--text-faint);
+    }
+
+    /* CARD DE EXPLICAÇÃO EM TEMPO REAL */
+    .guide-box {
+      background: rgba(14, 20, 27, 0.95);
+      border: 1px solid var(--laranja-border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease;
+      box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.5);
+      min-height: 54px;
+      flex-shrink: 0;
+      margin-top: auto;
+    }
+
+    .guide-box::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--azul), var(--laranja));
+    }
+
+    .guide-icon {
+      font-size: 18px;
+      color: var(--laranja);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .guide-content h4 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--laranja);
+      margin-bottom: 2px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .guide-content p {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    /* ===== RIGHT COLUMN: TERMINAL & HISTORY ===== */
+    .terminal-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--card-border);
+      flex-shrink: 0;
+    }
+
+    .terminal-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .terminal-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--card-border);
+    }
+    .terminal-dot.dot-red { background: #ef4444; }
+    .terminal-dot.dot-yellow { background: #f59e0b; }
+    .terminal-dot.dot-green { background: #10b981; }
+
+    .terminal-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-mini {
+      background: var(--card-bg-elev);
+      border: 1px solid var(--card-border);
+      color: var(--text-dim);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-mini:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border-color: var(--card-border-hover);
+    }
+
+    .btn-mini:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .terminal-body {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+      background: rgba(10, 14, 20, 0.88);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .terminal-watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 52%;
+      max-width: 380px;
+      height: auto;
+      object-fit: contain;
+      opacity: 0.045;
+      filter: blur(0.5px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    pre#terminal {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      min-height: 0;
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      overflow-y: auto;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: #d1d5db;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: none;
+    }
+
+    pre#terminal .cmd-tag {
+      color: var(--laranja);
+      font-weight: 700;
+    }
+    pre#terminal .ts-tag {
+      color: var(--text-faint);
+    }
+    pre#terminal .err-tag {
+      color: var(--danger);
+    }
+    pre#terminal .ok-tag {
+      color: #34d399;
+    }
+    pre#terminal .placeholder-tag {
+      color: var(--text-faint);
+      font-style: italic;
+    }
+
+    /* HISTÓRICO */
+    .history-card {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .history-list {
+      list-style: none;
+      max-height: 85px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .history-list li {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      background: rgba(10, 14, 20, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 5px 10px;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .history-list li:hover {
+      background: rgba(0, 119, 212, 0.15);
+      border-color: var(--azul-border);
+      color: #fff;
+    }
+
+    .history-list li span.h-time {
+      color: var(--text-faint);
+      font-size: 10.5px;
+    }
+
+    /* TOAST */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--card-bg-elev);
+      border: 1px solid var(--card-border-hover);
+      color: var(--text);
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(16px);
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.ok { border-color: var(--laranja); box-shadow: 0 0 20px var(--laranja-glow); }
+    #toast.err { border-color: var(--danger); box-shadow: 0 0 20px var(--danger-border); color: #fecaca; }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--laranja); }
+
+    /* MODAL DE CONFIRMAÇÃO */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10, 14, 20, 0.85);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 20px;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: var(--card-bg-elev);
+      border: 1px solid var(--danger-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(239, 68, 68, 0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transform: scale(0.95) translateY(10px);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .modal-overlay.open .modal-card {
+      transform: scale(1) translateY(0);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .modal-icon {
+      font-size: 24px;
+      line-height: 1;
+      background: var(--danger-bg);
+      padding: 8px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--danger-border);
+    }
+    .modal-title h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .modal-title p {
+      font-size: 11px;
+      color: var(--danger);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .modal-cmd-box {
+      background: rgba(10, 14, 20, 0.95);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--laranja);
+      font-weight: 600;
+    }
+    .modal-body {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 6px;
+    }
+    .btn-modal {
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .btn-modal-cancel {
+      background: var(--card-bg);
+      border-color: var(--card-border);
+      color: var(--text-dim);
+    }
+    .btn-modal-cancel:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-color: var(--card-border-hover);
+    }
+    .btn-modal-confirm {
+      background: var(--danger);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
+    }
+    .btn-modal-confirm:hover {
+      background: #dc2626;
+      box-shadow: 0 0 22px rgba(239, 68, 68, 0.6);
+    }
+
+    /* GRID DE INPUTS DUPLOS */
+    .grid-inputs-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    /* RESPONSIVIDADE */
+    @media (max-width: 1200px) {
+      main { grid-template-columns: 1fr; }
+      .grid-inputs-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      header { flex-direction: column; align-items: flex-start; height: auto; padding: 12px; }
+      main { padding: 12px; height: auto; }
+      .grid-buttons { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <div class="brand-logo-hero">
+        <img src="LogoPng.png" alt="Hedros Logo">
+      </div>
+      <div class="brand-text">
+        <h1>
+          <span class="logo-blue">HEDROS</span>
+          <span class="logo-orange">GIT</span>
+          <span class="badge-pro">PRO SUITE</span>
+        </h1>
+      </div>
+    </div>
+
+    <!-- SELETOR DE VERSÃO / MODO (BÁSICO, INTERMEDIÁRIO, AVANÇADO) -->
+    <nav class="mode-nav" aria-label="Níveis do Git">
+      <button class="btn-mode active" id="tabBasic" data-mode="basic" onclick="setMode('basic')">🟢 Básico</button>
+      <button class="btn-mode" id="tabInter" data-mode="inter" onclick="setMode('inter')">🔵 Intermediário</button>
+      <button class="btn-mode" id="tabAdv" data-mode="adv" onclick="setMode('adv')">🟣 Avançado</button>
+    </nav>
+
+    <div class="header-actions">
+      <div id="statusPill" class="status-pill offline" title="Status da Conexão Local">
+        <span class="dot"></span>
+        <span id="statusContent">Servidor Offline</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main>
+    <!-- COLUNA ESQUERDA: AÇÕES (3 VERSÕES) -->
+    <section class="panel" aria-label="Ações do Repositório">
+
+      <!-- ========================================== -->
+      <!-- 1. VERSÃO: GIT BÁSICO (USO DO DIA A DIA) -->
+      <!-- ========================================== -->
+      <div id="viewBasic" class="mode-view active-view">
+        
+        <!-- COMANDOS DO DIA A DIA -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-green"></span>
+              Comandos do Dia a Dia
+            </div>
+          </div>
+          <div class="grid-buttons">
+            <button class="btn-action" data-cmd="git status" data-tip="Use esse comando quando quiser ver quais arquivos foram alterados, quais estão no palco e o estado geral da branch." onclick="executar('git status')">
+              <span class="btn-ico">🔍</span> git status
+            </button>
+            <button class="btn-action btn-blue" data-cmd="git pull" data-tip="Use esse comando para baixar e mesclar as novidades do servidor remoto na sua branch." onclick="fazerPull()">
+              <span class="btn-ico">⬇️</span> git pull
+            </button>
+            <button class="btn-action btn-blue" data-cmd="git push" data-tip="Use esse comando para enviar os seus commits locais para a nuvem/servidor remoto." onclick="fazerPush()">
+              <span class="btn-ico">⬆️</span> git push
+            </button>
+            <button class="btn-action btn-danger" data-cmd="git restore ." data-tip="Use esse comando para descartar todas as alterações não salvas nos arquivos rastreados. Ação irreversível." onclick="confirmarEExecutar('git restore .', 'Descartar TODAS as alterações não commitadas nos arquivos?')">
+              <span class="btn-ico">⚠️</span> git restore .
+            </button>
+          </div>
+        </div>
+
+        <!-- PREPARAÇÃO & COMMIT -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-orange"></span>
+              Salvar Alterações (Commit)
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="grid-buttons">
+              <button class="btn-action btn-orange" data-cmd="git add ." data-tip="Use esse comando para marcar TODOS os arquivos modificados para o próximo commit." onclick="executar('git add .')">
+                <span class="btn-ico">➕</span> git add . (preparar tudo)
+              </button>
+            </div>
+            <div class="input-group">
+              <input type="text" id="msgCommitBasic" class="input-pro" placeholder="Mensagem do commit…" aria-label="Mensagem do commit">
+              <button class="btn-action btn-orange" style="flex-shrink:0; padding:0 18px;" data-cmd="git commit -m &quot;...&quot;" data-tip="Use esse botão para registrar o commit oficial com a mensagem digitada." onclick="fazerCommit('msgCommitBasic')">
+                <span class="btn-ico">💾</span> git commit -m
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TROCAR DE BRANCH -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-blue"></span>
+              Branch de Trabalho
+            </div>
+          </div>
+          <div class="input-group">
+            <input type="text" id="branchNameBasic" class="input-pro" placeholder="Nome da branch para alternar ou criar…" aria-label="Nome da branch">
+            <button class="btn-action btn-blue" style="flex-shrink:0; padding:0 14px;" data-cmd="git switch <branch>" data-tip="Use esse comando para trocar para outra branch existente." onclick="fazerSwitchBranch(false, 'branchNameBasic')">
+              <span class="btn-ico">🔀</span> git switch
+            </button>
+            <button class="btn-action btn-blue" style="flex-shrink:0; padding:0 14px;" data-cmd="git switch -c <branch>" data-tip="Use esse comando para criar uma NOVA branch e alternar para ela." onclick="fazerSwitchBranch(true, 'branchNameBasic')">
+              <span class="btn-ico">✨</span> git switch -c
+            </button>
+          </div>
+        </div>
+
+        <!-- PARTE INFERIOR: INICIALIZAÇÃO & CLONE -->
+        <div style="margin-top: 4px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.08);">
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-green"></span>
+              Novo Projeto (Init &amp; Clone)
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="input-group">
+              <input type="text" id="cloneUrlBasic" class="input-pro" placeholder="Cole o link HTTP / HTTPS para clonar repositório…" aria-label="URL do clone">
+              <button class="btn-action btn-green" style="flex-shrink:0; padding:0 18px;" data-cmd="git clone <url>" data-tip="Use esse botão para clonar o repositório remoto a partir do link digitado ou colado." onclick="fazerClone('cloneUrlBasic')">
+                <span class="btn-ico">📥</span> git clone
+              </button>
+            </div>
+            <div class="grid-buttons">
+              <button class="btn-action" data-cmd="git init" data-tip="Use esse comando para inicializar um repositório Git novo nesta pasta local." onclick="executar('git init')">
+                <span class="btn-ico">🚀</span> git init
+              </button>
+              <button class="btn-action btn-green" data-cmd=".gitignore Unity" data-tip="Use esse botão para criar um .gitignore padrão da Unity na pasta atual do projeto (Library, Temp, Builds, Logs etc.)." onclick="criarGitIgnore()">
+                <span class="btn-ico">🙈</span> .gitignore Unity
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 2. VERSÃO: GIT INTERMEDIÁRIO (VERSÃO ATUAL)-->
+      <!-- ========================================== -->
+      <div id="viewInter" class="mode-view">
+
+        <!-- VISUALIZAÇÃO & STATUS -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-blue"></span>
+              Visualização &amp; Status
+            </div>
+          </div>
+          <div class="grid-buttons">
+            <button class="btn-action" data-cmd="git status" data-tip="Use esse comando quando quiser ver quais arquivos foram alterados, quais estão preparados para commit e o estado geral da sua branch de trabalho." onclick="executar('git status')">
+              <span class="btn-ico">🔍</span> git status
+            </button>
+            <button class="btn-action" data-cmd="git log --oneline -n 10" data-tip="Use esse comando quando quiser ver o histórico resumido dos últimos 10 commits em formato direto de uma linha." onclick="executar('git log --oneline -n 10')">
+              <span class="btn-ico">📜</span> git log (10)
+            </button>
+            <button class="btn-action" data-cmd="git log --graph --oneline" data-tip="Use esse comando quando quiser ver a árvore visual completa de branches, ramificações e histórico de merges no terminal." onclick="executar('git log --graph --oneline -n 10')">
+              <span class="btn-ico">🌳</span> git log (gráfico)
+            </button>
+            <button class="btn-action" data-cmd="git branch -a" data-tip="Use esse comando quando quiser listar todas as branches existentes no projeto (tanto locais quanto no servidor remoto)." onclick="executar('git branch -a')">
+              <span class="btn-ico">🌿</span> git branch -a
+            </button>
+            <button class="btn-action" data-cmd="git remote -v" data-tip="Use esse comando quando quiser ver os endereços dos servidores remotos vinculados a este repositório." onclick="executar('git remote -v')">
+              <span class="btn-ico">🔗</span> git remote -v
+            </button>
+            <button class="btn-action" data-cmd="git diff" data-tip="Use esse comando quando quiser inspecionar linha por linha todas as alterações feitas nos arquivos antes de adicioná-las com git add." onclick="executar('git diff')">
+              <span class="btn-ico">📝</span> git diff
+            </button>
+            <button class="btn-action" data-cmd="git diff --stat" data-tip="Use esse comando quando quiser ver um resumo das alterações com a quantidade de linhas adicionadas e deletadas por arquivo." onclick="executar('git diff --stat')">
+              <span class="btn-ico">📊</span> git diff --stat
+            </button>
+            <button class="btn-action" data-cmd="git diff --staged" data-tip="Use esse comando quando quiser revisar exatamente as modificações que já foram preparadas no palco para o próximo commit." onclick="executar('git diff --staged')">
+              <span class="btn-ico">🔍</span> git diff --staged
+            </button>
+          </div>
+
+          <div class="input-group" style="margin-top: 8px;">
+            <input type="text" id="branchNameInter" class="input-pro" placeholder="Nome da branch para alternar ou criar…" aria-label="Nome da branch">
+            <button class="btn-action btn-blue" style="flex-shrink:0; padding:0 14px;" data-cmd="git switch <branch>" data-tip="Use esse comando quando quiser trocar de branch e trabalhar em outra ramificação já existente." onclick="fazerSwitchBranch(false, 'branchNameInter')">
+              <span class="btn-ico">🔀</span> git switch
+            </button>
+            <button class="btn-action btn-blue" style="flex-shrink:0; padding:0 14px;" data-cmd="git switch -c <branch>" data-tip="Use esse comando quando quiser criar uma NOVA branch e já entrar nela imediatamente." onclick="fazerSwitchBranch(true, 'branchNameInter')">
+              <span class="btn-ico">✨</span> git switch -c
+            </button>
+          </div>
+        </div>
+
+        <!-- PREPARAÇÃO & COMMITS -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-orange"></span>
+              Preparação &amp; Commits
+            </div>
+          </div>
+          <div class="grid-buttons" style="margin-bottom: 8px;">
+            <button class="btn-action btn-orange" data-cmd="git add ." data-tip="Use esse comando quando quiser adicionar todos os arquivos modificados e novos ao palco de uma só vez para o commit." onclick="executar('git add .')">
+              <span class="btn-ico">➕</span> git add .
+            </button>
+            <button class="btn-action btn-orange" data-cmd="git stash" data-tip="Use esse comando quando quiser guardar as alterações atuais em uma gaveta temporária (stash) para limpar o ambiente de trabalho sem perder nada." onclick="executar('git stash')">
+              <span class="btn-ico">📦</span> git stash
+            </button>
+            <button class="btn-action btn-orange" data-cmd="git stash pop" data-tip="Use esse comando quando quiser retirar as alterações guardadas na gaveta (stash) e reaplicá-las nos arquivos de trabalho." onclick="executar('git stash pop')">
+              <span class="btn-ico">📥</span> git stash pop
+            </button>
+          </div>
+
+          <div class="input-group">
+            <input type="text" id="msgCommitInter" class="input-pro" placeholder="Mensagem do commit…" aria-label="Mensagem do commit">
+            <button class="btn-action btn-orange" style="flex-shrink:0; padding:0 18px;" data-cmd="git commit -m &quot;...&quot;" data-tip="Use esse comando quando quiser salvar as alterações preparadas no histórico oficial do repositório com a mensagem digitada." onclick="fazerCommit('msgCommitInter')">
+              <span class="btn-ico">💾</span> git commit -m
+            </button>
+          </div>
+        </div>
+
+        <!-- SINCRONIZAÇÃO NUVEM -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-blue"></span>
+              Sincronização Nuvem
+            </div>
+          </div>
+          <div class="grid-buttons">
+            <button class="btn-action btn-blue" data-cmd="git pull" data-tip="Use esse comando quando quiser baixar e integrar as atualizações do servidor remoto diretamente na sua branch atual." onclick="fazerPull()">
+              <span class="btn-ico">⬇️</span> git pull
+            </button>
+            <button class="btn-action btn-blue" data-cmd="git push" data-tip="Use esse comando quando quiser enviar os seus commits locais para o servidor remoto e publicá-los." onclick="fazerPush()">
+              <span class="btn-ico">⬆️</span> git push
+            </button>
+            <button class="btn-action btn-blue" data-cmd="git fetch --all" data-tip="Use esse comando quando quiser atualizar todas as referências de branches e tags da nuvem sem alterar seus arquivos de trabalho." onclick="executar('git fetch --all')">
+              <span class="btn-ico">🔄</span> git fetch --all
+            </button>
+          </div>
+        </div>
+
+        <!-- OPERAÇÕES CRÍTICAS / DESFAZER -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-red"></span>
+              Desfazer &amp; Limpeza (Cuidado!)
+            </div>
+          </div>
+          <div class="grid-buttons">
+            <button class="btn-action btn-danger" data-cmd="git restore ." data-tip="Use esse comando quando quiser descartar todas as alterações não commitadas nos arquivos rastreados. Essa ação não pode ser desfeita." onclick="confirmarEExecutar('git restore .', 'Descartar TODAS as alterações de arquivos não commitados?')">
+              <span class="btn-ico">⚠️</span> git restore .
+            </button>
+            <button class="btn-action btn-danger" data-cmd="git reset --soft HEAD~1" data-tip="Use esse comando quando quiser desfazer o último commit mas mantendo todas as modificações nos arquivos prontas no palco." onclick="confirmarEExecutar('git reset --soft HEAD~1', 'Desfazer o último commit mantendo as alterações nos arquivos?')">
+              <span class="btn-ico">↩️</span> git reset --soft HEAD~1
+            </button>
+            <button class="btn-action btn-danger" data-cmd="git clean -fd" data-tip="Use esse comando quando quiser apagar forçadamente arquivos e pastas que ainda não foram rastreados pelo Git." onclick="confirmarEExecutar('git clean -fd', 'Remover arquivos e pastas não rastreados?')">
+              <span class="btn-ico">🧹</span> git clean -fd
+            </button>
+          </div>
+        </div>
+
+        <!-- IDENTIDADE GIT (CONFIG) -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-blue"></span>
+              Identidade Git (user.name &amp; user.email)
+            </div>
+          </div>
+          <div class="grid-inputs-2">
+            <input type="text" id="gitUserName" class="input-pro" placeholder="user.name (ex: Felipe Hedros)" aria-label="Git User Name">
+            <input type="email" id="gitUserEmail" class="input-pro" placeholder="user.email (ex: felipe@hedros.com)" aria-label="Git User Email">
+            <button class="btn-action btn-blue" style="padding: 0 16px; flex-shrink: 0;" data-cmd="git config user.name &amp; user.email" data-tip="Use esse botão para configurar ou atualizar o seu nome e e-mail no repositório de forma automática." onclick="aplicarGitConfig()">
+              <span class="btn-ico">👤</span> git config user
+            </button>
+          </div>
+        </div>
+
+        <!-- COMANDO PERSONALIZADO -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-orange"></span>
+              Comando Personalizado
+            </div>
+          </div>
+          <div class="input-group">
+            <input type="text" id="comandoCustomInter" class="input-pro" placeholder="Ex: git checkout -b feature/minha-tela" aria-label="Comando personalizado">
+            <button class="btn-action btn-blue" style="flex-shrink:0; padding:0 20px;" data-cmd="Executar comando personalizado" data-tip="Use esse botão quando quiser executar o comando Git digitado no campo ao lado." onclick="enviarCustomizado('comandoCustomInter')">
+              <span class="btn-ico">⚡</span> Executar
+            </button>
+          </div>
+        </div>
+
+        <!-- PARTE INFERIOR: INICIALIZAÇÃO & CLONE -->
+        <div style="margin-top: 4px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.08);">
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-blue"></span>
+              Novo Projeto (Init &amp; Clone)
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="input-group">
+              <input type="text" id="cloneUrlInter" class="input-pro" placeholder="Cole o link HTTP / HTTPS / SSH para clonar repositório…" aria-label="URL do repositório para clone">
+              <button class="btn-action btn-blue" style="flex-shrink:0; padding:0 18px;" data-cmd="git clone <url>" data-tip="Use esse botão quando quiser clonar o repositório remoto a partir do link HTTP/HTTPS digitado ou colado no campo ao lado." onclick="fazerClone('cloneUrlInter')">
+                <span class="btn-ico">📥</span> git clone
+              </button>
+            </div>
+            <div class="grid-buttons">
+              <button class="btn-action" data-cmd="git init" data-tip="Use esse comando quando quiser inicializar um repositório Git novo e vazio nesta pasta local." onclick="executar('git init')">
+                <span class="btn-ico">🚀</span> git init
+              </button>
+              <button class="btn-action btn-blue" data-cmd=".gitignore Unity" data-tip="Use esse botão para criar um .gitignore padrão da Unity na pasta atual do projeto (Library, Temp, Builds, Logs etc.)." onclick="criarGitIgnore()">
+                <span class="btn-ico">🙈</span> .gitignore Unity
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 3. VERSÃO: GIT AVANÇADO (TODOS OS COMANDOS)-->
+      <!-- ========================================== -->
+      <div id="viewAdv" class="mode-view">
+
+        <!-- REMOTES -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-purple"></span>
+              Remotes
+            </div>
+          </div>
+          <div class="grid-buttons">
+            <button class="btn-action" data-cmd="git remote -v" data-tip="Use esse comando para listar todos os servidores remotos vinculados e suas URLs." onclick="executar('git remote -v')">
+              <span class="btn-ico">🔗</span> git remote -v
+            </button>
+            <button class="btn-action" data-cmd="git remote prune origin" data-tip="Use esse comando para remover referências locais de branches que já foram apagadas na nuvem." onclick="executar('git remote prune origin')">
+              <span class="btn-ico">✂️</span> git remote prune
+            </button>
+          </div>
+        </div>
+
+        <!-- INSPEÇÃO & HISTÓRICO PROFUNDO -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-purple"></span>
+              Inspeção, Diffs &amp; Histórico Profundo
+            </div>
+          </div>
+          <div class="grid-buttons">
+            <button class="btn-action" data-cmd="git status" data-tip="Use esse comando para ver o status completo da árvore de trabalho." onclick="executar('git status')">
+              <span class="btn-ico">🔍</span> git status
+            </button>
+            <button class="btn-action" data-cmd="git log --graph --all --oneline -n 15" data-tip="Use esse comando para ver a árvore visual completa de todas as branches e merges." onclick="executar('git log --graph --all --oneline -n 15')">
+              <span class="btn-ico">🌳</span> git log (árvore completa)
+            </button>
+            <button class="btn-action" data-cmd="git show HEAD" data-tip="Use esse comando para inspecionar os detalhes e o diff completo do commit mais recente." onclick="executar('git show HEAD')">
+              <span class="btn-ico">🔎</span> git show HEAD
+            </button>
+            <button class="btn-action" data-cmd="git reflog -n 15" data-tip="Use esse comando para ver o histórico completo de movimentações do HEAD (útil para resgatar commits perdidos)." onclick="executar('git reflog -n 15')">
+              <span class="btn-ico">🕰️</span> git reflog (15)
+            </button>
+            <button class="btn-action" data-cmd="git diff" data-tip="Use esse comando para ver o diff linha por linha de arquivos não preparados." onclick="executar('git diff')">
+              <span class="btn-ico">📝</span> git diff
+            </button>
+            <button class="btn-action" data-cmd="git diff --staged" data-tip="Use esse comando para ver o diff do que já está preparado no palco para commit." onclick="executar('git diff --staged')">
+              <span class="btn-ico">📋</span> git diff --staged
+            </button>
+            <button class="btn-action" data-cmd="git diff --stat" data-tip="Use esse comando para ver o resumo numérico de linhas inseridas e deletadas." onclick="executar('git diff --stat')">
+              <span class="btn-ico">📊</span> git diff --stat
+            </button>
+          </div>
+        </div>
+
+        <!-- GAVETAS STASH COMPLETO -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-orange"></span>
+              Stash (Gaveta de Alterações)
+            </div>
+          </div>
+          <div class="grid-buttons">
+            <button class="btn-action btn-orange" data-cmd="git stash" data-tip="Use esse comando para guardar as alterações atuais na gaveta e limpar a árvore de trabalho." onclick="executar('git stash')">
+              <span class="btn-ico">📦</span> git stash
+            </button>
+            <button class="btn-action btn-orange" data-cmd="git stash pop" data-tip="Use esse comando para retirar o último stash guardado e aplicá-lo nos arquivos." onclick="executar('git stash pop')">
+              <span class="btn-ico">📥</span> git stash pop
+            </button>
+            <button class="btn-action btn-orange" data-cmd="git stash list" data-tip="Use esse comando para listar todos os stashes armazenados na gaveta." onclick="executar('git stash list')">
+              <span class="btn-ico">📑</span> git stash list
+            </button>
+            <button class="btn-action btn-danger" data-cmd="git stash drop" data-tip="Use esse comando para descartar o último stash armazenado." onclick="confirmarEExecutar('git stash drop', 'Deseja descartar permanentemente o último stash guardado?')">
+              <span class="btn-ico">🗑️</span> git stash drop
+            </button>
+            <button class="btn-action btn-danger" data-cmd="git stash clear" data-tip="Use esse comando para apagar TODOS os stashes da gaveta." onclick="confirmarEExecutar('git stash clear', 'Deseja APAGAR TODOS os stashes guardados? Esta ação não pode ser desfeita.')">
+              <span class="btn-ico">🧯</span> git stash clear
+            </button>
+          </div>
+        </div>
+
+        <!-- RAMIFICAÇÕES, MERGE & REBASE -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-blue"></span>
+              Branches, Merge &amp; Rebase
+            </div>
+          </div>
+          <div class="grid-buttons" style="margin-bottom: 8px;">
+            <button class="btn-action" data-cmd="git branch -a" data-tip="Use esse comando para listar todas as branches locais e remotas." onclick="executar('git branch -a')">
+              <span class="btn-ico">🌿</span> git branch -a
+            </button>
+            <button class="btn-action btn-blue" data-cmd="git merge" data-tip="Use esse comando para mesclar alterações de outra branch na sua branch atual." onclick="executarComPrompt('git merge', 'Digite a branch de origem para mesclar (merge):')">
+              <span class="btn-ico">🔀</span> git merge &lt;branch&gt;
+            </button>
+            <button class="btn-action btn-purple" data-cmd="git rebase" data-tip="Use esse comando para reaplicar seus commits no topo de outra branch." onclick="executarComPrompt('git rebase', 'Digite a branch base para o rebase:')">
+              <span class="btn-ico">🥞</span> git rebase &lt;branch&gt;
+            </button>
+            <button class="btn-action btn-purple" data-cmd="git cherry-pick" data-tip="Use esse comando para aplicar um commit específico na branch atual." onclick="executarComPrompt('git cherry-pick', 'Digite o HASH do commit para cherry-pick:')">
+              <span class="btn-ico">🍒</span> git cherry-pick &lt;hash&gt;
+            </button>
+            <button class="btn-action btn-danger" data-cmd="git branch -d" data-tip="Use esse comando para deletar uma branch local já mesclada." onclick="executarComPrompt('git branch -d', 'Digite o nome da branch local para deletar:')">
+              <span class="btn-ico">🗑️</span> git branch -d
+            </button>
+          </div>
+
+          <div class="input-group">
+            <input type="text" id="branchNameAdv" class="input-pro" placeholder="Nome da branch para alternar ou criar…" aria-label="Nome da branch">
+            <button class="btn-action btn-blue" style="flex-shrink:0; padding:0 14px;" data-cmd="git switch <branch>" data-tip="Use esse comando para trocar para outra branch existente." onclick="fazerSwitchBranch(false, 'branchNameAdv')">
+              <span class="btn-ico">🔀</span> git switch
+            </button>
+            <button class="btn-action btn-blue" style="flex-shrink:0; padding:0 14px;" data-cmd="git switch -c <branch>" data-tip="Use esse comando para criar uma NOVA branch e entrar nela." onclick="fazerSwitchBranch(true, 'branchNameAdv')">
+              <span class="btn-ico">✨</span> git switch -c
+            </button>
+          </div>
+        </div>
+
+        <!-- PREPARAÇÃO, COMMITS & AMEND -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-orange"></span>
+              Preparação, Commits &amp; Amend
+            </div>
+          </div>
+          <div class="grid-buttons" style="margin-bottom: 8px;">
+            <button class="btn-action btn-orange" data-cmd="git add ." data-tip="Use esse comando para preparar todos os arquivos para o commit." onclick="executar('git add .')">
+              <span class="btn-ico">➕</span> git add .
+            </button>
+            <button class="btn-action btn-orange" data-cmd="git add -p" data-tip="Use esse comando para revisar e escolher trechos específicos de cada arquivo para o palco." onclick="executar('git add -p')">
+              <span class="btn-ico">🧩</span> git add -p
+            </button>
+            <button class="btn-action btn-orange" data-cmd="git commit --amend --no-edit" data-tip="Use esse comando para juntar as alterações preparadas no último commit sem alterar a mensagem." onclick="executar('git commit --amend --no-edit')">
+              <span class="btn-ico">🔄</span> git commit --amend
+            </button>
+          </div>
+
+          <div class="input-group">
+            <input type="text" id="msgCommitAdv" class="input-pro" placeholder="Mensagem do commit…" aria-label="Mensagem do commit">
+            <button class="btn-action btn-orange" style="flex-shrink:0; padding:0 18px;" data-cmd="git commit -m &quot;...&quot;" data-tip="Use esse comando para registrar o commit oficial com a mensagem digitada." onclick="fazerCommit('msgCommitAdv')">
+              <span class="btn-ico">💾</span> git commit -m
+            </button>
+          </div>
+        </div>
+
+        <!-- SINCRONIZAÇÃO, TAGS & RELEASES -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-blue"></span>
+              Sync, Tags &amp; Releases
+            </div>
+          </div>
+          <div class="grid-buttons">
+            <button class="btn-action btn-blue" data-cmd="git pull" data-tip="Use esse comando para baixar e integrar atualizações remotas." onclick="fazerPull()">
+              <span class="btn-ico">⬇️</span> git pull
+            </button>
+            <button class="btn-action btn-blue" data-cmd="git push" data-tip="Use esse comando para enviar commits locais para a nuvem." onclick="fazerPush()">
+              <span class="btn-ico">⬆️</span> git push
+            </button>
+            <button class="btn-action btn-blue" data-cmd="git fetch --all" data-tip="Use esse comando para atualizar o índice de branches e tags remotas." onclick="executar('git fetch --all')">
+              <span class="btn-ico">🔄</span> git fetch --all
+            </button>
+            <button class="btn-action btn-purple" data-cmd="git tag" data-tip="Use esse comando para listar todas as tags de versão registradas." onclick="executar('git tag')">
+              <span class="btn-ico">🏷️</span> git tag (listar)
+            </button>
+            <button class="btn-action btn-purple" data-cmd="git tag -a" data-tip="Use esse comando para criar uma nova tag de versão no commit atual." onclick="criarTagPrompt()">
+              <span class="btn-ico">🔖</span> git tag -a &lt;nome&gt;
+            </button>
+            <button class="btn-action btn-purple" data-cmd="git push --tags" data-tip="Use esse comando para enviar todas as tags locais para o servidor remoto." onclick="executar('git push --tags')">
+              <span class="btn-ico">🚀</span> git push --tags
+            </button>
+          </div>
+        </div>
+
+        <!-- DESFAZER & OPERAÇÕES CRÍTICAS -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-red"></span>
+              Desfazer &amp; Ações Críticas (Cuidado!)
+            </div>
+          </div>
+          <div class="grid-buttons">
+            <button class="btn-action btn-danger" data-cmd="git restore ." data-tip="Use esse comando para descartar todas as alterações não commitadas." onclick="confirmarEExecutar('git restore .', 'Descartar TODAS as alterações não salvas?')">
+              <span class="btn-ico">⚠️</span> git restore .
+            </button>
+            <button class="btn-action btn-danger" data-cmd="git restore --staged ." data-tip="Use esse comando para tirar todos os arquivos do palco (unstage) sem perder modificações." onclick="executar('git restore --staged .')">
+              <span class="btn-ico">↩️</span> git restore --staged .
+            </button>
+            <button class="btn-action btn-danger" data-cmd="git reset --soft HEAD~1" data-tip="Use esse comando para desfazer o último commit mantendo as mudanças no palco." onclick="confirmarEExecutar('git reset --soft HEAD~1', 'Desfazer o último commit mantendo as alterações nos arquivos?')">
+              <span class="btn-ico">↩️</span> git reset --soft HEAD~1
+            </button>
+            <button class="btn-action btn-danger" data-cmd="git reset --hard HEAD~1" data-tip="Use esse comando para APAGAR o último commit e DESCARTAR todas as alterações feitas nele. Ação destrutiva extrema." onclick="confirmarEExecutar('git reset --hard HEAD~1', 'PERIGO EXTREMO: Desfazer o último commit e APAGAR todas as alterações nos arquivos? Isso não pode ser desfeito.')">
+              <span class="btn-ico">💥</span> git reset --hard HEAD~1
+            </button>
+            <button class="btn-action btn-danger" data-cmd="git revert HEAD" data-tip="Use esse comando para criar um commit novo que desfaz as alterações do último commit com segurança." onclick="confirmarEExecutar('git revert HEAD --no-edit', 'Criar um commit de reversão do commit atual?')">
+              <span class="btn-ico">🛡️</span> git revert HEAD
+            </button>
+            <button class="btn-action btn-danger" data-cmd="git clean -fd" data-tip="Use esse comando para apagar arquivos e pastas não rastreados." onclick="confirmarEExecutar('git clean -fd', 'Remover arquivos e pastas não rastreados?')">
+              <span class="btn-ico">🧹</span> git clean -fd
+            </button>
+          </div>
+        </div>
+
+        <!-- MANUTENÇÃO & SAÚDE DO REPOSITÓRIO -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-purple"></span>
+              Manutenção &amp; Integridade
+            </div>
+          </div>
+          <div class="grid-buttons">
+            <button class="btn-action" data-cmd="git gc --prune=now" data-tip="Use esse comando para otimizar o banco de dados local do Git e limpar arquivos órfãos." onclick="executar('git gc --prune=now')">
+              <span class="btn-ico">⚙️</span> git gc (otimizar)
+            </button>
+            <button class="btn-action" data-cmd="git fsck" data-tip="Use esse comando para verificar a integridade e consistência do repositório." onclick="executar('git fsck')">
+              <span class="btn-ico">🩺</span> git fsck (integridade)
+            </button>
+            <button class="btn-action" data-cmd="git config --list --show-origin" data-tip="Use esse comando para inspecionar todas as configurações ativas do Git e onde estão salvas." onclick="executar('git config --list --show-origin')">
+              <span class="btn-ico">📜</span> git config --list
+            </button>
+          </div>
+        </div>
+
+        <!-- GIT LFS POR ARQUIVO -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-purple"></span>
+              Git LFS (por arquivo)
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="input-group">
+              <input type="text" id="lfsFileAdv" class="input-pro" placeholder="Caminho do arquivo (ex: Assets/Videos/cutscene.mp4)" aria-label="Arquivo para Git LFS">
+              <button class="btn-action btn-purple" style="flex-shrink:0; padding:0 14px;" data-cmd="git lfs track &lt;arquivo&gt;" data-tip="Use esse comando para rastrear UM arquivo específico no Git LFS. Não usa padrão geral tipo *.psd." onclick="fazerLfs('track')">
+                <span class="btn-ico">📦</span> git lfs track
+              </button>
+              <button class="btn-action btn-danger" style="flex-shrink:0; padding:0 14px;" data-cmd="git lfs untrack &lt;arquivo&gt;" data-tip="Use esse comando para parar de rastrear UM arquivo específico no Git LFS." onclick="fazerLfs('untrack')">
+                <span class="btn-ico">🚫</span> git lfs untrack
+              </button>
+            </div>
+            <div class="grid-buttons">
+              <button class="btn-action btn-purple" data-cmd="git lfs install" data-tip="Use esse comando uma vez no repositório para ativar o Git LFS neste projeto." onclick="executar('git lfs install')">
+                <span class="btn-ico">⚙️</span> git lfs install
+              </button>
+              <button class="btn-action" data-cmd="git lfs ls-files" data-tip="Use esse comando para listar os arquivos que já estão no Git LFS." onclick="executar('git lfs ls-files')">
+                <span class="btn-ico">📑</span> git lfs ls-files
+              </button>
+              <button class="btn-action" data-cmd="git lfs status" data-tip="Use esse comando para ver o status dos arquivos LFS na árvore de trabalho." onclick="executar('git lfs status')">
+                <span class="btn-ico">🔍</span> git lfs status
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMANDO PERSONALIZADO LIVRE -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-orange"></span>
+              Terminal Personalizado Livre
+            </div>
+          </div>
+          <div class="input-group">
+            <input type="text" id="comandoCustomAdv" class="input-pro" placeholder="Ex: git log --author='Felipe' --grep='feat'…" aria-label="Comando personalizado">
+            <button class="btn-action btn-purple" style="flex-shrink:0; padding:0 20px;" data-cmd="Executar comando personalizado" data-tip="Use esse botão para executar qualquer comando Git digitado livremente." onclick="enviarCustomizado('comandoCustomAdv')">
+              <span class="btn-ico">⚡</span> Executar
+            </button>
+          </div>
+        </div>
+
+        <!-- PARTE INFERIOR: INICIALIZAÇÃO & CLONE -->
+        <div style="margin-top: 4px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.08);">
+          <div class="section-head">
+            <div class="section-title">
+              <span class="bar-purple"></span>
+              Novo Projeto (Init &amp; Clone)
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="input-group">
+              <input type="text" id="cloneUrlAdv" class="input-pro" placeholder="URL para clone (HTTP / HTTPS / SSH)…" aria-label="URL do clone">
+              <button class="btn-action btn-purple" style="flex-shrink:0; padding:0 18px;" data-cmd="git clone <url>" data-tip="Use esse botão para clonar o repositório remoto a partir do link digitado ou colado." onclick="fazerClone('cloneUrlAdv')">
+                <span class="btn-ico">📥</span> git clone
+              </button>
+            </div>
+            <div class="grid-buttons">
+              <button class="btn-action" data-cmd="git init" data-tip="Use esse comando para inicializar um repositório Git novo nesta pasta local." onclick="executar('git init')">
+                <span class="btn-ico">🚀</span> git init
+              </button>
+              <button class="btn-action btn-purple" data-cmd=".gitignore Unity" data-tip="Use esse botão para criar um .gitignore padrão da Unity na pasta atual do projeto (Library, Temp, Builds, Logs etc.)." onclick="criarGitIgnore()">
+                <span class="btn-ico">🙈</span> .gitignore Unity
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- GUIA DINÂMICO FIXO (INSPECTOR DE COMANDO NO HOVER) -->
+      <div class="guide-box" id="guideBox">
+        <div class="guide-icon">💡</div>
+        <div class="guide-content">
+          <h4 id="guideTitle">Guia do Comando</h4>
+          <p id="guideText">Passe o mouse sobre qualquer botão para ver a explicação de quando e como utilizá-lo.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- COLUNA DIREITA: TERMINAL & HISTÓRICO -->
+    <aside class="panel terminal-panel">
+      
+      <div class="terminal-header">
+        <div class="terminal-title">
+          <div class="terminal-dots">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+          </div>
+          Saída do Terminal
+        </div>
+        <div class="terminal-actions">
+          <button class="btn-mini" id="copyBtn" onclick="copiarSaida()" disabled>📋 Copiar</button>
+          <button class="btn-mini" onclick="limparTerminal()">🧯 Limpar</button>
+        </div>
+      </div>
+
+      <div class="terminal-body">
+        <img class="terminal-watermark" src="LogoWhite.png" alt="">
+        <pre id="terminal"><span class="placeholder-tag">Aguardando comando… O output do Git aparecerá aqui.</span></pre>
+      </div>
+
+      <!-- HISTÓRICO DE COMANDOS -->
+      <div class="history-card">
+        <div class="section-head" style="margin-bottom: 4px;">
+          <div class="section-title">
+            <span class="bar-orange"></span>
+            Histórico Recente
+          </div>
+          <button class="btn-mini" onclick="limparHistorico()" style="padding: 2px 8px; font-size: 11px;">Limpar</button>
+        </div>
+        <ul class="history-list" id="historyList">
+          <li style="justify-content: center; cursor: default; color: var(--text-faint);">Nenhum comando executado nesta sessão.</li>
+        </ul>
+      </div>
+
+    </aside>
+  </main>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <!-- MODAL DE CONFIRMAÇÃO PARA COMANDOS CRÍTICOS -->
+  <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-icon">⚠️</div>
+        <div class="modal-title">
+          <p>Confirmação Necessária</p>
+          <h3 id="modalTitle">Executar Ação Crítica</h3>
+        </div>
+      </div>
+      <div class="modal-cmd-box" id="modalCmd">$ git comando</div>
+      <div class="modal-body" id="modalMsg">
+        Tem certeza que deseja executar este comando? Esta ação pode alterar ou descartar arquivos permanentemente.
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal btn-modal-cancel" onclick="fecharModalConfirmacao()">Cancelar (Esc)</button>
+        <button class="btn-modal btn-modal-confirm" id="btnModalConfirm" onclick="executarConfirmado()">Confirmar e Executar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://127.0.0.1:3000/api/exec-git';
+    const HISTORY_KEY = 'hedros-git-history';
+    const MODE_KEY = 'hedros-git-mode';
+    const MAX_HISTORY = 20;
+
+    const terminal = document.getElementById('terminal');
+    const copyBtn = document.getElementById('copyBtn');
+    const statusPill = document.getElementById('statusPill');
+    const statusContent = document.getElementById('statusContent');
+    const historyList = document.getElementById('historyList');
+
+    const guideBox = document.getElementById('guideBox');
+    const guideTitle = document.getElementById('guideTitle');
+    const guideText = document.getElementById('guideText');
+
+    const confirmModal = document.getElementById('confirmModal');
+    const modalCmd = document.getElementById('modalCmd');
+    const modalMsg = document.getElementById('modalMsg');
+
+    const gitUserNameInput = document.getElementById('gitUserName');
+    const gitUserEmailInput = document.getElementById('gitUserEmail');
+
+    let lastOutput = '';
+    let currentBranch = '';
+    let comandoPendente = null;
+
+    function agora() {
+      const d = new Date();
+      return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function appendLine(html) {
+      const placeholder = terminal.querySelector('.placeholder-tag');
+      if (placeholder) placeholder.remove();
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      terminal.appendChild(div);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function toast(msg, type) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'show' + (type ? ' ' + type : '');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => { t.className = ''; }, 2600);
+    }
+
+    /* SISTEMA DE VERSÕES / MODOS (BÁSICO, INTERMEDIÁRIO, AVANÇADO) */
+    function setMode(mode) {
+      const modes = ['basic', 'inter', 'adv'];
+      if (!modes.includes(mode)) mode = 'basic';
+
+      // Atualiza botões
+      document.querySelectorAll('.btn-mode').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
+      });
+
+      // Atualiza visualizações
+      document.getElementById('viewBasic').classList.toggle('active-view', mode === 'basic');
+      document.getElementById('viewInter').classList.toggle('active-view', mode === 'inter');
+      document.getElementById('viewAdv').classList.toggle('active-view', mode === 'adv');
+
+      // Salva no localStorage
+      localStorage.setItem(MODE_KEY, mode);
+      vincularGuias();
+    }
+
+    async function atualizarBranch() {
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comando: 'git branch --show-current' })
+        });
+        const dados = await res.json();
+        currentBranch = (dados.saida || '').trim() || 'main';
+        statusContent.innerHTML = `Online <span class="branch-info">🌿 ${escapeHtml(currentBranch)}</span>`;
+      } catch {
+        currentBranch = '';
+        statusContent.textContent = 'Online';
+      }
+    }
+
+    async function checarServidor() {
+      try {
+        const ctrl = new AbortController();
+        const to = setTimeout(() => ctrl.abort(), 1500);
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comando: 'git --version' }),
+          signal: ctrl.signal
+        });
+        clearTimeout(to);
+        if (res.ok) {
+          statusPill.className = 'status-pill online';
+          if (!currentBranch) {
+            statusContent.textContent = 'Online';
+          }
+          atualizarBranch();
+          return true;
+        }
+        throw new Error();
+      } catch {
+        statusPill.className = 'status-pill offline';
+        statusContent.textContent = 'Servidor Offline';
+        currentBranch = '';
+        return false;
+      }
+    }
+
+    async function executar(comando) {
+      const ts = agora();
+      appendLine(`<span class="ts-tag">[${ts}]</span> <span class="cmd-tag">$ ${escapeHtml(comando)}</span>`);
+      copyBtn.disabled = true;
+
+      const online = await checarServidor();
+      if (!online) {
+        appendLine(`<span class="err-tag">✖ Servidor local offline. Abra pelo atalho "Git Hedros.lnk" para iniciá-lo.</span>`);
+        lastOutput = '';
+        toast('Servidor Offline', 'err');
+        return;
+      }
+
+      appendLine(`<span class="ts-tag">… processando comando…</span>`);
+
+      try {
+        const resposta = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comando: comando })
+        });
+        const dados = await resposta.json();
+        const saida = dados.saida || dados.erro || 'Sem saída de texto.';
+        lastOutput = saida;
+        const isErr = dados.erro || saida.toLowerCase().includes('error') || saida.toLowerCase().startsWith('fatal');
+        
+        appendLine(`<span class="${isErr ? 'err-tag' : 'ok-tag'}">${escapeHtml(saida)}</span>\n`);
+        copyBtn.disabled = false;
+        adicionarHistorico(comando);
+        atualizarBranch();
+
+        if (isErr) {
+          toast('Erro na execução', 'err');
+        } else {
+          toast('Comando concluído', 'ok');
+        }
+      } catch (erro) {
+        appendLine(`<span class="err-tag">✖ Falha ao comunicar com o servidor local.</span>\n`);
+        lastOutput = '';
+        toast('Erro de Comunicação', 'err');
+      }
+    }
+
+    async function obterBranchAtual() {
+      if (currentBranch) return currentBranch;
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comando: 'git branch --show-current' })
+        });
+        const dados = await res.json();
+        currentBranch = (dados.saida || '').trim() || 'main';
+      } catch { currentBranch = 'main'; }
+      return currentBranch;
+    }
+
+    async function fazerPush() {
+      const branch = await obterBranchAtual();
+      const cmd = `git push -u origin ${branch}`;
+      appendLine(`<span class="ts-tag">[${agora()}]</span> <span class="cmd-tag">$ ${escapeHtml(cmd)}</span>`);
+      copyBtn.disabled = true;
+      const online = await checarServidor();
+      if (!online) {
+        appendLine(`<span class="err-tag">✖ Servidor local offline. Abra pelo atalho "Git Hedros.lnk" para iniciá-lo.</span>`);
+        toast('Servidor Offline', 'err');
+        return;
+      }
+      try {
+        const resposta = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comando: cmd })
+        });
+        const dados = await resposta.json();
+        const saida = dados.saida || dados.erro || 'Sem saída de texto.';
+        lastOutput = saida;
+        const isErr = dados.erro || saida.toLowerCase().includes('error') || saida.toLowerCase().startsWith('fatal');
+        appendLine(`<span class="${isErr ? 'err-tag' : 'ok-tag'}">${escapeHtml(saida)}</span>\n`);
+        copyBtn.disabled = false;
+        adicionarHistorico(cmd);
+        atualizarBranch();
+        toast(isErr ? 'Erro na execução' : 'Push concluído', isErr ? 'err' : 'ok');
+      } catch (erro) {
+        appendLine(`<span class="err-tag">✖ Falha ao comunicar com o servidor local.</span>\n`);
+        toast('Erro de Comunicação', 'err');
+      }
+    }
+
+    async function fazerPull() {
+      const branch = await obterBranchAtual();
+      // Primeiro garante o upstream configurado; depois puxa direto da branch remota
+      const cmds = [
+        `git branch --set-upstream-to=origin/${branch} ${branch}`,
+        'git pull'
+      ];
+      let sucesso = false;
+      for (const cmd of cmds) {
+        appendLine(`<span class="ts-tag">[${agora()}]</span> <span class="cmd-tag">$ ${escapeHtml(cmd)}</span>`);
+        const online = await checarServidor();
+        if (!online) {
+          appendLine(`<span class="err-tag">✖ Servidor local offline. Abra pelo atalho "Git Hedros.lnk" para iniciá-lo.</span>`);
+          toast('Servidor Offline', 'err');
+          return;
+        }
+        try {
+          const resposta = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ comando: cmd })
+          });
+          const dados = await resposta.json();
+          const saida = dados.saida || dados.erro || 'Sem saída de texto.';
+          lastOutput = saida;
+          const isErr = dados.erro || saida.toLowerCase().includes('error') || saida.toLowerCase().startsWith('fatal');
+          appendLine(`<span class="${isErr ? 'err-tag' : 'ok-tag'}">${escapeHtml(saida)}</span>\n`);
+          adicionarHistorico(cmd);
+          if (!isErr) sucesso = true;
+          if (cmd.startsWith('git pull')) {
+            copyBtn.disabled = false;
+            atualizarBranch();
+            toast(sucesso || !isErr ? 'Pull concluído' : 'Erro na execução', isErr ? 'err' : 'ok');
+          }
+        } catch (erro) {
+          appendLine(`<span class="err-tag">✖ Falha ao comunicar com o servidor local.</span>\n`);
+          toast('Erro de Comunicação', 'err');
+          return;
+        }
+      }
+      if (!sucesso) {
+        appendLine(`<span class="err-tag">Não foi possível sincronizar. Confira se o remote "origin" existe e se ${branch} já foi enviada uma vez.</span>\n`);
+      }
+    }
+
+    function fazerCommit(inputId) {
+      const msgInput = document.getElementById(inputId || 'msgCommitBasic');
+      const msg = msgInput.value.trim();
+      if (!msg) {
+        toast('Digite uma mensagem para o commit', 'err');
+        msgInput.focus();
+        return;
+      }
+      const msgFormatada = msg.replace(/"/g, '\\"');
+      executar(`git commit -m "${msgFormatada}"`);
+      msgInput.value = '';
+    }
+
+    function enviarCustomizado(inputId) {
+      const input = document.getElementById(inputId || 'comandoCustomInter');
+      const v = input.value.trim();
+      if (!v) { input.focus(); return; }
+      executar(v);
+      input.value = '';
+    }
+
+    function fazerClone(inputId) {
+      const input = document.getElementById(inputId || 'cloneUrlBasic');
+      const url = input.value.trim();
+      if (!url) {
+        toast('Cole ou digite o link HTTP/HTTPS/SSH do repositório', 'err');
+        input.focus();
+        return;
+      }
+      executar(`git clone ${url}`);
+      input.value = '';
+    }
+
+    function fazerSwitchBranch(criarNova, inputId) {
+      const input = document.getElementById(inputId || 'branchNameBasic');
+      let branch = input.value.trim();
+
+      if (!branch) {
+        branch = prompt(criarNova ? 'Digite o nome da NOVA branch para criar e alternar:' : 'Digite o nome da branch para alternar:');
+        if (!branch || !branch.trim()) return;
+        branch = branch.trim();
+      }
+
+      if (criarNova) {
+        executar(`git switch -c ${branch}`);
+      } else {
+        executar(`git switch ${branch}`);
+      }
+      input.value = '';
+    }
+
+    function executarComPrompt(comandoBase, mensagemPrompt) {
+      const val = prompt(mensagemPrompt);
+      if (!val || !val.trim()) return;
+      executar(`${comandoBase} ${val.trim()}`);
+    }
+
+    function criarTagPrompt() {
+      const tag = prompt('Digite o nome da Tag (ex: v1.0.0):');
+      if (!tag || !tag.trim()) return;
+      const msg = prompt('Digite a mensagem da Tag (opcional):') || tag;
+      executar(`git tag -a ${tag.trim()} -m "${msg.replace(/"/g, '\\"')}"`);
+    }
+
+    async function criarGitIgnore(overwrite) {
+      const ts = agora();
+      appendLine(`<span class="ts-tag">[${ts}]</span> <span class="cmd-tag">$ criar .gitignore Unity</span>`);
+      copyBtn.disabled = true;
+
+      const online = await checarServidor();
+      if (!online) {
+        appendLine(`<span class="err-tag">✖ Servidor local offline. Abra pelo atalho "Git Hedros.lnk" para iniciá-lo.</span>`);
+        toast('Servidor Offline', 'err');
+        return;
+      }
+
+      try {
+        const resposta = await fetch('http://127.0.0.1:3000/api/criar-gitignore', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ overwrite: !!overwrite })
+        });
+        const dados = await resposta.json();
+        const saida = dados.saida || dados.erro || 'Sem saída.';
+        lastOutput = saida;
+
+        if (dados.exists && !overwrite) {
+          appendLine(`<span class="err-tag">${escapeHtml(saida)}</span>\n`);
+          copyBtn.disabled = false;
+          confirmarEExecutar('OVERWRITE_GITIGNORE', 'Já existe um .gitignore nesta pasta. Deseja substituir pelo padrão Unity?');
+          return;
+        }
+
+        if (dados.erro) {
+          appendLine(`<span class="err-tag">${escapeHtml(saida)}</span>\n`);
+          toast('Falha ao criar .gitignore', 'err');
+        } else {
+          appendLine(`<span class="ok-tag">${escapeHtml(saida)}</span>\n`);
+          toast('.gitignore Unity criado', 'ok');
+        }
+        copyBtn.disabled = false;
+      } catch (erro) {
+        appendLine(`<span class="err-tag">✖ Falha ao comunicar com o servidor local.</span>\n`);
+        toast('Erro de Comunicação', 'err');
+      }
+    }
+
+    function fazerLfs(acao) {
+      const input = document.getElementById('lfsFileAdv');
+      const arquivo = input.value.trim();
+      if (!arquivo) {
+        toast('Informe o caminho de UM arquivo para o Git LFS', 'err');
+        input.focus();
+        return;
+      }
+      const safe = arquivo.replace(/"/g, '\\"');
+      executar(`git lfs ${acao} "${safe}"`);
+    }
+
+    /* MODAL DE CONFIRMAÇÃO */
+    function confirmarEExecutar(comando, mensagemConfirmacao) {
+      comandoPendente = comando;
+      modalCmd.textContent = `$ ${comando}`;
+      modalMsg.textContent = mensagemConfirmacao || 'Tem certeza que deseja executar este comando? Esta ação pode alterar ou descartar arquivos permanentemente.';
+      confirmModal.classList.add('open');
+      document.getElementById('btnModalConfirm').focus();
+    }
+
+    function fecharModalConfirmacao() {
+      confirmModal.classList.remove('open');
+      comandoPendente = null;
+    }
+
+    function executarConfirmado() {
+      if (comandoPendente) {
+        const cmd = comandoPendente;
+        fecharModalConfirmacao();
+        if (cmd === 'OVERWRITE_GITIGNORE') {
+          criarGitIgnore(true);
+          return;
+        }
+        executar(cmd);
+      }
+    }
+
+    /* CONFIGURAÇÃO DE IDENTIDADE (user.name & user.email) */
+    async function carregarGitConfig() {
+      try {
+        const resName = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comando: 'git config user.name' })
+        });
+        const dName = await resName.json();
+        if (dName.saida && dName.saida.trim() && gitUserNameInput) {
+          gitUserNameInput.value = dName.saida.trim();
+        }
+
+        const resEmail = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comando: 'git config user.email' })
+        });
+        const dEmail = await resEmail.json();
+        if (dEmail.saida && dEmail.saida.trim() && gitUserEmailInput) {
+          gitUserEmailInput.value = dEmail.saida.trim();
+        }
+      } catch {}
+    }
+
+    async function aplicarGitConfig() {
+      const name = gitUserNameInput.value.trim();
+      const email = gitUserEmailInput.value.trim();
+
+      if (!name && !email) {
+        toast('Preencha ao menos o nome ou o e-mail', 'err');
+        return;
+      }
+
+      if (name) {
+        const safeName = name.replace(/"/g, '\\"');
+        await executar(`git config user.name "${safeName}"`);
+      }
+      if (email) {
+        const safeEmail = email.replace(/"/g, '\\"');
+        await executar(`git config user.email "${safeEmail}"`);
+      }
+
+      toast('Identidade Git configurada com sucesso!', 'ok');
+    }
+
+    function copiarSaida() {
+      if (!lastOutput) return;
+      navigator.clipboard.writeText(lastOutput).then(
+        () => toast('Saída copiada para a área de transferência', 'ok'),
+        () => toast('Falha ao copiar', 'err')
+      );
+    }
+
+    function limparTerminal() {
+      terminal.innerHTML = '<span class="placeholder-tag">Terminal limpo. Aguardando novo comando…</span>';
+      lastOutput = '';
+      copyBtn.disabled = true;
+      toast('Terminal limpo');
+    }
+
+    /* HISTÓRICO */
+    function carregarHistorico() {
+      try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch { return []; }
+    }
+
+    function renderHistorico() {
+      const h = carregarHistorico();
+      historyList.innerHTML = '';
+      if (!h.length) {
+        historyList.innerHTML = '<li style="justify-content:center; cursor:default; color:var(--text-faint);">Nenhum comando recente.</li>';
+        return;
+      }
+      h.forEach(item => {
+        const li = document.createElement('li');
+        li.title = 'Clique para reexecutar este comando';
+        li.innerHTML = `<span class="h-time">${item.t}</span> <span>$ ${escapeHtml(item.cmd)}</span>`;
+        li.onclick = () => executar(item.cmd);
+        historyList.appendChild(li);
+      });
+    }
+
+    function adicionarHistorico(cmd) {
+      let h = carregarHistorico().filter(x => x.cmd !== cmd);
+      h.unshift({ t: agora(), cmd });
+      h = h.slice(0, MAX_HISTORY);
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(h));
+      renderHistorico();
+    }
+
+    function limparHistorico() {
+      localStorage.removeItem(HISTORY_KEY);
+      renderHistorico();
+      toast('Histórico limpo');
+    }
+
+    /* SISTEMA DE GUIA DINÂMICO (HOVER NOS BOTÕES) */
+    const defaultGuide = "Passe o mouse sobre qualquer botão para ver a explicação de quando e como utilizá-lo.";
+    function vincularGuias() {
+      document.querySelectorAll('button[data-tip]').forEach(btn => {
+        btn.onmouseenter = () => {
+          const tip = btn.getAttribute('data-tip');
+          const cmd = btn.getAttribute('data-cmd') || btn.innerText.trim();
+          guideTitle.textContent = `Guia: ${cmd}`;
+          guideText.textContent = tip;
+          guideBox.style.borderColor = 'var(--laranja)';
+          guideBox.style.boxShadow = 'inset 0 0 20px rgba(0, 0, 0, 0.5), 0 0 20px var(--laranja-glow)';
+        };
+        btn.onmouseleave = () => {
+          guideTitle.textContent = "Guia do Comando";
+          guideText.textContent = defaultGuide;
+          guideBox.style.borderColor = 'var(--laranja-border)';
+          guideBox.style.boxShadow = 'inset 0 0 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 94, 19, 0.08)';
+        };
+      });
+    }
+
+    /* ATALHOS DE TECLADO E EVENTOS MODAL */
+    ['msgCommitBasic', 'msgCommitInter', 'msgCommitAdv'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('keypress', e => { if (e.key === 'Enter') fazerCommit(id); });
+    });
+
+    ['cloneUrlBasic', 'cloneUrlInter', 'cloneUrlAdv'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('keypress', e => { if (e.key === 'Enter') fazerClone(id); });
+    });
+
+    ['branchNameBasic', 'branchNameInter', 'branchNameAdv'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('keypress', e => { if (e.key === 'Enter') fazerSwitchBranch(false, id); });
+    });
+
+    ['comandoCustomInter', 'comandoCustomAdv'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('keypress', e => { if (e.key === 'Enter') enviarCustomizado(id); });
+    });
+
+    const lfsInput = document.getElementById('lfsFileAdv');
+    if (lfsInput) lfsInput.addEventListener('keypress', e => { if (e.key === 'Enter') fazerLfs('track'); });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && confirmModal.classList.contains('open')) {
+        fecharModalConfirmacao();
+      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'l') {
+        e.preventDefault();
+        limparTerminal();
+      }
+    });
+
+    confirmModal.addEventListener('click', e => {
+      if (e.target === confirmModal) {
+        fecharModalConfirmacao();
+      }
+    });
+
+    /* INICIALIZAÇÃO */
+    renderHistorico();
+    const savedMode = localStorage.getItem(MODE_KEY) || 'basic';
+    setMode(savedMode);
+
+    checarServidor().then(online => {
+      if (online) carregarGitConfig();
+    });
+    setInterval(checarServidor, 12000);
+  </script>
+
+</body>
+</html>
