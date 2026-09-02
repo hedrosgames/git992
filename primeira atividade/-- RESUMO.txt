@@ -1,0 +1,14 @@
+﻿ALUNOS QUE NÃO ENTREGARAM A PRIMEIRA ATIVIDADE:
+
+1. João Pedro Toledo Ribeiro (Matrícula: 00466373)
+2. Manuela Lima Toledo (Matrícula: 00466523)
+3. Pâmela Cordeiro Machado (Matrícula: 00466556)
+4. Rafael Vieira Lima (Matrícula: 00473607)
+5. Samily Cardoso Gomes (Matrícula: 00467718)
+
+--------------------------------------------------
+ESTATÍSTICAS DA ATIVIDADE:
+Total de alunos na turma: 31
+Entregas realizadas: 26
+Não entregaram: 5
+--------------------------------------------------
