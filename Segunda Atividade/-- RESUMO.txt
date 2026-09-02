@@ -1,28 +1,25 @@
-﻿ALUNOS QUE NÃO ENTREGARAM A SEGUNDA ATIVIDADE:
+ALUNOS QUE NÃO ENTREGARAM A SEGUNDA ATIVIDADE:
 
 1. Anna Sophia Freire Dos Santos
 2. Camila Haziel Da Silva Paiva
 3. Carlos Eduardo Belieni Andrade
-4. Carlos Eduardo Farias De Oliveira
-5. Davi Chagas Milczanowski
-6. Davi Nogueira Ferreira
-7. Davi Vargas Silva
-8. João Lucas Reis De Oliveira Da Silva
-9. João Pedro Toledo Ribeiro (Matrícula: 00466373)
-10. João Victor Ribeiro Da Silva
-11. Manuela Lima Toledo (Matrícula: 00466523)
-12. Matheus Da Silva Ferreira De Oliveira
-13. Miguel De Souza Pereira
-14. Mirella De Oliveira Villela
-15. Pâmela Cordeiro Machado (Matrícula: 00466556)
-16. Rafael Vieira Lima (Matrícula: 00473607)
-17. Samily Cardoso Gomes (Matrícula: 00467718)
-18. Samuel Dos Santos Silveira Magalhães
-19. Thales Feliciano Orlando Nogueira
+4. Davi Chagas Milczanowski
+5. Davi Nogueira Ferreira
+6. Davi Vargas Silva
+7. João Lucas Reis De Oliveira Da Silva
+8. João Pedro Toledo Ribeiro (Matrícula: 00466373)
+9. João Victor Ribeiro Da Silva
+10. Manuela Lima Toledo (Matrícula: 00466523)
+11. Matheus Da Silva Ferreira De Oliveira
+12. Miguel De Souza Pereira
+13. Mirella De Oliveira Villela
+14. Pâmela Cordeiro Machado (Matrícula: 00466556)
+15. Samily Cardoso Gomes (Matrícula: 00467718)
+16. Samuel Dos Santos Silveira Magalhães
 
 --------------------------------------------------
 ESTATÍSTICAS DA ATIVIDADE:
 Total de alunos na turma: 31
-Entregas realizadas (via branch): 12
-Não entregaram: 19
+Entregas realizadas (via branch): 15
+Não entregaram: 16
 --------------------------------------------------
