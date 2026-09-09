@@ -1,0 +1,6 @@
+-Fiz o txt
+-Criei a branch
+-adicionei as coisas na branch
+-commitei
+-fiz o push pra branch
+-vou fazer com o André
