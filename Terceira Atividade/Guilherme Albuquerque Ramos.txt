@@ -1,0 +1,10 @@
+clonei o repositório usando git clone
+entrei na pasta do repositorio usando cd
+criei minha branch usando git checkout -b feature/GuilhermeAlbuquerqueRamos
+entrei na pasta da terceira atividade
+criei o arquivo de texto com meu nome
+escrevi passo a passo nesse documento
+dei git add . pra adicionar o arquivo
+dei git commit -m "Guilherme A Ramos"
+dei git push
+amiga escolhida pra ultima etapa: Camila Haziel da Silva Paiva
