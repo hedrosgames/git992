@@ -1,0 +1,14 @@
+ALUNOS QUE NÃO ENTREGARAM A PRIMEIRA ATIVIDADE:
+
+1. João Pedro Toledo Ribeiro
+2. Manuela Lima Toledo
+3. Pâmela Cordeiro Machado
+4. Rafael Vieira Lima
+5. Samily Cardoso Gomes
+
+--------------------------------------------------
+ESTATÍSTICAS DA ATIVIDADE:
+Total de alunos na turma: 31
+Entregas realizadas: 26
+Não entregaram: 5
+--------------------------------------------------
