@@ -4,8 +4,8 @@ A atividade só pode ser feita até as 9:45, qualquer entrega após esse prazo n
 
 O objetivo é: Adicionar um documento com o seu nome completo dentro da pasta da atividade 3, via github.
 
-Regras:  
+Regras:
+- Uma branch deve ser criada com o nome de feature/nomedoaluno
 - O nome deve ser exatamente o seu nome completo no formato Nome Sobrenome - se não estiver assim, o trabalho é zerado.
 - Dentro do arquivo txt contendo o seu nome, você deve escrever todos os passos que utilizou para subir essa pasta e também qual amigo escolheu para fazer a próxima etapa.
-- Uma branch deve ser criada com o nome de feature/nomedoaluno
 - Você deve pegar uma branch de um amigo seu, e adicionar o seu arquivo também na branch dele.
