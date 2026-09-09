@@ -13,6 +13,6 @@ Passos utilizados:
 9. Adicionei o arquivo utilizando git add.
 10. Fiz um commit utilizando git commit.
 11. Enviei minha branch para o GitHub utilizando git push.
-12. Na última etapa, escolhi meu amigo NOME DO AMIGO.
-13. Peguei a branch do meu amigo e adicionei meu arquivo nela.
-14. Fiz o commit e enviei a alteração para a branch do meu amigo.
+12. Na última etapa, escolhi meu amigo Carlos Eduardo Belieni.
+13. Peguei a branch do Carlos Eduardo Belieni e adicionei meu arquivo nela.
+14. Fiz o commit e enviei a alteração para a branch do Carlos Eduardo Belieni
