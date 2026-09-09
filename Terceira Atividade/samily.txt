@@ -1,0 +1,1 @@
+eu clonei o git992 e depois criei a branch com meu nome. acessei a atividade 3 e criei o arquivo com meu nome para escrever os passos. adicionei o arquivo com git add e realizei o commit com git commit. enviei minha branch para o GitHub com git push. por ultimo eu escolhi o chagas para realizar a ultima etapa
