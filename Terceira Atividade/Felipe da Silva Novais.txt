@@ -1,0 +1,4 @@
+Primeiro fiz login no git bash, depois executei o "git pull" para puxar o arquivo atualizado. 
+Logo após criei uma branch com meu nome e escrevi um arquivo texto descrevendo o processo que levei para chegar aqui. 
+Fiz um "git push" da minha branch. 
+Escolhi João Nery com amigo.
