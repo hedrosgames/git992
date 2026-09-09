@@ -1,0 +1,12 @@
+1. loguei com o git config 
+2. cd desktop pra ir para conseguir copiar a pasta git992 pra área de trabalho
+3. git clone para clonar o git992
+4. cd git992 pra colocar o (master)
+5. git pull para atualizar
+6. git checkout -b feature/DaniloDrumondMoreiradaSilva para criar a branch
+7. git branch para ver se eu estou na branch criada
+8. adicionei no arquivo Git
+9. Dei git commit e git push
+10. fiz com a amiga Anna Clara
+
+Nome da pessoa escolhida: Anna Clara Araújo de Sousa
