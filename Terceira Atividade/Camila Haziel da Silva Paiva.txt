@@ -1,0 +1,10 @@
+clonei o repositório com o git clone
+entrei na pasta com cd
+crie a branch com git checkout -b feature/CamilaHazieldaSilvaPaiva
+entrei na pasta da Terceira Atividade 
+criei o aqv de txt
+escrevi nele
+git add . para adicionar o aqv
+git commit -m "Camila Haziel da Silva Paiva"
+git push 
+Amigo escolhido: Guilhereme Albuquerque Ramos
