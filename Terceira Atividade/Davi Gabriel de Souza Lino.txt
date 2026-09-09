@@ -1,0 +1,4 @@
+-criei a branch
+-fiz o treco do txt
+-commitei pra minha branch
+-escolhi fazer com meu amigo André Luiz Bastos de Moraes
