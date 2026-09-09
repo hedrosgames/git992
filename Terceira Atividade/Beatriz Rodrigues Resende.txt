@@ -1,0 +1,22 @@
+Passos utilizados para a realização da terceira atividade:
+
+1. Primeiro abri o git bash, fiz o login com "git config --global user.name"" e git config --global user.email"" "
+2. Fiz um git clone (link do repositório)
+3. Depois coloquei cd git992
+4. Criei uma nova branch usando git switch -c feature/BeatrizRodrigues 
+5. Criação do arquivop dentro da pasta terceira atividade 
+6. Adicionei o  git add .
+7.  git commit -m , Adicionei o arquivo da atividade 
+8. git push -u origin feature/BeatrizRodrigues 
+
+Depois peguei a branch da Anna Clara e adicionei meu arquivo na branch dela.
+
+1. git fetch
+2. git branch -a
+3. git switch -c feature/AnnaClaraAraujoDeSousa --track origin/feature/AnnaClaraAraujoDeSousa
+4. git branch
+5. Copiei meu arquivo e adicionei na pasta dela
+6. git add .
+7. git status
+8. git commit -m "Adicina arquivo da Beatriz" 
+9. git push
