@@ -1,0 +1,6 @@
+-Fiz o Pull para ler a atividade
+-Criei a branch "feature/AndreLuizBastosdeMoraes"
+-Criei o Txt
+-Escrevi isso aqui
+-Fiz o push para minha branch
+-Escolhi os amigos Alex Cristian Freitas de Aguiar Júnior e Davi Gabriel e João Pedro Toledo Ribeiro para a próxima etapa.
