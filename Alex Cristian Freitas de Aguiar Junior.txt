@@ -1,0 +1,4 @@
+git add .
+git branch -m feature/alexcristianfreitasdeaguiarjunior
+git commit -m "Alex sou eu oi eu sou Alex"
+git push https://github.com/hedrosgames/git992 feature/alexcristianfreitasdeaguiarjunior
