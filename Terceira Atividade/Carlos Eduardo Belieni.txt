@@ -1,0 +1,16 @@
+Nome: Carlos Eduardo Belieni
+
+Passo a passo:
+
+1. Acessei o repositório do projeto no GitHub.
+2. Atualizei o repositório para obter as alterações mais recentes.
+3. Criei uma nova branch chamada feature/Carlos-Eduardo-Belieni.
+4. Acessei a pasta Atividade 3.
+5. Criei o arquivo Carlos Eduardo Belieni.txt dentro da pasta.
+6. Adicionei meu nome e este passo a passo dentro do arquivo.
+7. Adicionei o arquivo às alterações do Git.
+8. Realizei o commit das alterações.
+9. Enviei minha branch para o GitHub.
+10. Na última etapa, utilizei a branch do meu amigo para adicionar meu arquivo também.
+
+Amigo escolhido para a última etapa: João Victor Ribeiro
