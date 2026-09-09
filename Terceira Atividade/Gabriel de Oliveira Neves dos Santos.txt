@@ -1,0 +1,21 @@
+Loguei usando "Git config --global user.name" e "git config --global user.email"
+usei git clone para copiar o repositório
+usei "cd git992"
+usei "git switch -c feature/GabrielDeOliveira
+criei o arquivo de texto dentro da pasta
+usei git add .
+git commit -m "Adiciona arquivo da atividade"
+git push -u origin feature/GabrielDeOliveira
+
+Adicionei o meu arquivo na branch da Beatriz usando: 
+
+git fetch 
+git branch -a 
+git switch -c feature/BeatrizRodrigues --track origin/feature/BeatrizRodrigues
+git branch
+Copiei meu arquivo e adicionei dentro da pasta da terceira atividade dela
+git add .
+git status 
+git commit -m "Adiciona arquivo do Gabriel"
+git push
+git status
