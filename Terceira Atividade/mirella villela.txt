@@ -1,0 +1,2 @@
+Copiei o link do git, clonei o git, criei o branch, entrei na minha pasta, criei o .txt com meu nome e escrevi o que fiz nele. Dei add . Dei commit. Dei push.
+Por último escolhi o Luiz Gustavo para fazer a atividade 
