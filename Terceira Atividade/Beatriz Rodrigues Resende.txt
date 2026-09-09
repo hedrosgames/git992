@@ -18,5 +18,5 @@ Depois peguei a branch da Anna Clara e adicionei meu arquivo na branch dela.
 5. Copiei meu arquivo e adicionei na pasta dela
 6. git add .
 7. git status
-8. git commit -m "Adicina arquivo da Beatriz" 
+8. git commit -m "Adiciona arquivo da Beatriz" 
 9. git push
