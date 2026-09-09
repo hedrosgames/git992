@@ -1,0 +1,6 @@
+entrei no GitHub e copiei o link pra clonar
+criei uma pasta, abri o git bash e clonei e depois dei o "cd 992" pra poder entrar na pasta
+aí eu entrei na pasta da Atividade 3, criei o .txt com meu nome
+digitei dentro do .txt os passos
+dei "add ." no git bash, dei commit e por último dei push
+então escolhi a Samily pra fazer a última etapa
