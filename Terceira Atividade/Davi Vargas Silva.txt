@@ -1,0 +1,5 @@
+logeui no git bash 
+criei uma branch 
+criei o arquivo 
+entrei na branch da Anna Clara 
+coloquei meu arquivo na branch dela 
