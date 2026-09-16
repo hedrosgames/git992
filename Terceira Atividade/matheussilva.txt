@@ -1,0 +1,17 @@
+Passo a passo:
+
+1. Acessei o repositório git992.
+2. Criei a branch feature/Carlos-Eduardo-Belieni.
+3. Criei o arquivo Carlos Eduardo Belieni.txt dentro da pasta Terceira Atividade.
+4. Coloquei meu nome e o passo a passo dentro do arquivo.
+5. Adicionei o arquivo com git add.
+6. Fiz o commit com a mensagem "Adiciona arquivo da Atividade 3".
+7. Enviei minha branch para o GitHub com git push.
+8. Acessei a branch do meu amigo joaovictor.
+9. Usei git fetch --all para atualizar as informações das branches.
+10. Peguei o meu arquivo da branch feature/Carlos-Eduardo-Belieni e adicionei na branch do meu amigo.
+11. Fiz o commit das alterações.
+12. Atualizei a branch do meu amigo com git pull.
+13. Enviei as alterações para a branch do meu amigo com git push.
+
+Amigo escolhido para a última etapa: João Victor.
