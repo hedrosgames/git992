@@ -1,0 +1,5 @@
+Primeiro eu fiz um git pull na parte da pasta "git992"	para puxar a nova informação da terceira atividade.
+Depois eu fui na pasta da terceira atividade e já adicionei o arquivo txt
+Após isso abri o git bash na pasta da terceira atividade e fiz um git branch colocando o nome falado nas instruções e então entrei nela usando um git checkout
+Já dentro da branch eu fiz um git add . para depois fazer um git commit e adicionar o meu arquivo txt no trabalho e depois fiz um git pull e um git push para enviar as informações novas. 
+E o meu amiguinho é o FP trem bala ou Felipe para os menos íntimos.
