@@ -9,4 +9,8 @@
 9. Dei git commit e git push
 10. fiz com a amiga Anna Clara
 
+<<<<<<< HEAD
 Nome da pessoa escolhida: Anna Clara Araújo de Sousa
+=======
+Nome da pessoa escolhida: Anna Clara Araújo de Sousa
+>>>>>>> 56438c4e86d91275b2bdc48332b9f91fecaa726d
