@@ -1,0 +1,15 @@
+Clonei o repositório utilizando o comando git clone.
+1. Acessei a pasta do projeto utilizando o comando cd.
+2. Acessei a pasta da atividade 3.
+3. Criei a branch feature/AnnaClaraAraujoDeSousa.
+ utilizando o comando git checkout -b feature/AnnaClaraAraujoDeSousa.
+4. Criei o arquivo Anna Clara Araujo De Sousa.txt dentro da pasta da atividade 3.
+5. Adicionei ao arquivo os passos realizados nesta atividade.
+6. Adicionei o arquivo ao Git utilizando git add.
+7. Realizei o commit utilizando git commit.
+8. Enviei minha branch para o GitHub utilizando git push.
+9. Depois, peguei a branch do Danilo para realizar a última etapa.
+10. Adicionei meu arquivo também na branch do meu amigo.
+
+Amigo escolhido para fazer a última etapa:
+Danilo
