@@ -1,0 +1,5 @@
+loguei no git bash 
+criei esse doc 
+entrei na pasta com o cd 
+criei a branch com git branch 
+usei git switch para nomear a branch e entrar
