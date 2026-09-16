@@ -1,0 +1,18 @@
+Joao Victor Silva
+
+Passos utilizados:
+
+1. Criei uma pasta para armazenar o projeto.
+2. Abri o Git Bash dentro da pasta.
+3. Clonei o repositório utilizando o comando git clone.
+4. Entrei na pasta do projeto utilizando o comando cd.
+5. Verifiquei o status do repositório utilizando o comando git status.
+6. Criei uma branch chamada feature/joaovictor.
+7. Entrei na pasta Terceira Atividade.
+8. Criei este arquivo TXT com meu nome completo.
+9. Adicionei o arquivo utilizando git add.
+10. Fiz um commit utilizando git commit.
+11. Enviei minha branch para o GitHub utilizando git push.
+12. Na última etapa, escolhi meu amigo NOME DO AMIGO.
+13. Peguei a branch do meu amigo e adicionei meu arquivo nela.
+14. Fiz o commit e enviei a alteração para a branch do meu amigo.
