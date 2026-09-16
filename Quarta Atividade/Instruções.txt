@@ -1,0 +1,13 @@
+Instruções da Quarta Atividade
+
+Objetivo: Fazer o Merge da sua branch na branch master.
+
+Esse trabalho pode ser entregue até 00h de hoje, e não vai poder ser refeito sem atestado médico aos que não entregar.
+
+O valor é de 10 pontos.
+
+Tarefas:
+1. Criar um arquivo com o seu nome na pasta quarta atividade, dentro desse arquivo deve estar escrito, "Eu não vou ficar de dependência". Esse arquivo deve ser comitado e enviado para o git na sua branch, a mesma da atividade 3.
+2. Fazer o merge da sua branch na branch main.
+
+Você pode usar o chat gpt para ajudar no processo.
