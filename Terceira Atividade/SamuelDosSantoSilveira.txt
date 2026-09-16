@@ -1,0 +1,9 @@
+1. Entrei na pasta do repositório utilizando o Git Bash.
+2. Executei o comando git pull para atualizar as informações do GitHub.
+3. Criei uma nova branch utilizando o comando git checkout -b feature/SamuelSilveira.
+5. Entrei na pasta da Atividade 3.
+4. Criei o arquivo SamuelSilveira.txt.
+6. Escrevi o passo-a-passo.
+8. Adicionei o arquivo utilizando git add.
+9. Fiz o commit utilizando git commit.
+10. Enviei minha branch para o GitHub utilizando git push.
