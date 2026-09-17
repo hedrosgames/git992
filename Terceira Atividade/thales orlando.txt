@@ -1,0 +1,9 @@
+Passos utilizados para subir a pasta:
+1. Fiz o clone do repositório no computador.
+2. Criei e mudei para a branch "feature/thales" usando o comando "git checkout -b feature/thales".
+3. Criei este arquivo .txt dentro da pasta "Terceira Atividade" com o meu nome e sobrenome.
+4. Salvei as alterações com "git add ." e "git commit -m ...".
+5. Enviei a branch para o GitHub com "git push -u origin feature/thales".
+6. Baixei a branch do meu amigo e adicionei o meu arquivo nela também.
+
+Amigo escolhido para a última etapa: Gustavo

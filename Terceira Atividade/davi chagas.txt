@@ -1,0 +1,1 @@
+clonei o git, criei um branch, entrei na atividade 3 e coloqyei um .txt, adicionei o git com add e fiz commit e envie meu arquivo com push. escolhi meu amigo carlos Eduardo farias para ultima etapa da tarefa
