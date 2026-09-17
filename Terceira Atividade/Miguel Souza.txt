@@ -1,0 +1,7 @@
+- dei clone
+- cd git992
+- criei a branch
+- fiz o txt
+- adicionei as coisas na pasta da atividade 3
+- commitei
+- fiz o push pra branch
