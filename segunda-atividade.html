@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segunda Atividade: Dominando Branches no Git • Turma 992</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #0a0f18;
+      --bg-surface: #0f172a;
+      --bg-card: #141e33;
+      --bg-card-hover: #192640;
+      --bg-code: #0b1120;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #38bdf8;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.25);
+      --accent-green: #10b981;
+      --accent-green-glow: rgba(16, 185, 129, 0.2);
+      --accent-purple: #a855f7;
+      --accent-amber: #f59e0b;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 25px rgba(56, 189, 248, 0.15);
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.1) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.5) 0px, transparent 100%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      padding: 32px 20px 80px 20px;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Badge Institucional */
+    .badge-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .badge-senai {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 18px;
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: var(--radius-full);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(56, 189, 248, 0.15);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #e2e8f0;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+
+    /* Cabeçalho */
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 800;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 14px;
+    }
+
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto;
+      font-weight: 400;
+    }
+
+    /* Card de Conceito */
+    .concept-card {
+      background: linear-gradient(135deg, rgba(20, 30, 51, 0.95), rgba(15, 23, 42, 0.95));
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-card), var(--shadow-glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .concept-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--accent-purple));
+    }
+
+    .concept-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .concept-text {
+      color: #cbd5e1;
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    /* Visual Branch Diagram */
+    .branch-diagram {
+      margin-top: 20px;
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .diagram-track {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      font-family: var(--font-mono);
+    }
+
+    .track-tag {
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      min-width: 130px;
+      text-align: center;
+    }
+
+    .tag-master {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .tag-branch {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .diagram-line {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      gap: 6px;
+      color: var(--text-dim);
+    }
+
+    .node {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      border: 2px solid var(--bg-surface);
+      display: inline-block;
+    }
+
+    .node.master { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
+    .node.feature { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+    .seg { flex: 1; height: 2px; background: rgba(255, 255, 255, 0.15); }
+    .seg.green { background: rgba(16, 185, 129, 0.4); }
+
+    /* Interactive Helper Generator */
+    .generator-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .generator-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .generator-icon {
+      font-size: 1.5rem;
+    }
+
+    .generator-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .generator-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .generator-input-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .input-field {
+      flex: 1;
+      min-width: 200px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    /* Cards de Passos */
+    .steps-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      margin-bottom: 48px;
+    }
+
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    .step-card:hover {
+      border-color: rgba(56, 189, 248, 0.3);
+      box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.6);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .step-number {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--primary), #0284c7);
+      color: #ffffff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .step-description {
+      color: #cbd5e1;
+      font-size: 0.98rem;
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+
+    /* Code Terminal Box */
+    .terminal-box {
+      background: var(--bg-code);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .terminal-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-red { background-color: #ef4444; }
+    .dot-yellow { background-color: #f59e0b; }
+    .dot-green { background-color: #10b981; }
+
+    .terminal-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--primary);
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+
+    .copy-btn.copied {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--accent-green);
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .code-content {
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .code-line {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .code-line:last-child {
+      margin-bottom: 0;
+    }
+
+    .prompt-symbol {
+      color: var(--primary);
+      font-weight: 600;
+      user-select: none;
+    }
+
+    .cmd-highlight {
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .flag-highlight {
+      color: #a855f7;
+    }
+
+    .param-highlight {
+      color: #fde047;
+    }
+
+    .string-highlight {
+      color: #34d399;
+    }
+
+    /* Tip Box / Callout */
+    .callout {
+      display: flex;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-top: 14px;
+    }
+
+    .callout-tip {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 3px solid var(--accent-amber);
+      color: #fde68a;
+    }
+
+    .callout-info {
+      background: rgba(56, 189, 248, 0.1);
+      border-left: 3px solid var(--primary);
+      color: #bae6fd;
+    }
+
+    .callout-success {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 3px solid var(--accent-green);
+      color: #a7f3d0;
+    }
+
+    /* Checklist & Final Tips */
+    .checklist-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 40px;
+    }
+
+    .checklist-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checklist-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+    }
+
+    .checklist-items {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    .checklist-item:hover {
+      border-color: rgba(56, 189, 248, 0.25);
+      background: rgba(20, 30, 51, 0.8);
+    }
+
+    .checklist-item.checked {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .checklist-checkbox {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid var(--text-dim);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.2s;
+    }
+
+    .checklist-item.checked .checklist-checkbox {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      color: #0b1120;
+    }
+
+    .checklist-text {
+      flex: 1;
+      font-size: 0.95rem;
+      color: #e2e8f0;
+    }
+
+    .checklist-item.checked .checklist-text {
+      color: #94a3b8;
+      text-decoration: line-through;
+    }
+
+    /* Progress Bar */
+    .progress-box {
+      margin-bottom: 20px;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--accent-green));
+      border-radius: var(--radius-full);
+      transition: width 0.3s ease;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsividade */
+    @media (max-width: 640px) {
+      body {
+        padding: 20px 14px 60px 14px;
+      }
+      .step-card, .concept-card, .checklist-section, .generator-card {
+        padding: 20px 16px;
+      }
+      .step-header {
+        gap: 12px;
+      }
+      .step-number {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+      }
+      .step-title {
+        font-size: 1.15rem;
+      }
+      .badge-senai {
+        font-size: 0.7rem;
+        padding: 6px 12px;
+      }
+      .diagram-track {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Stamp / Badge Institucional -->
+    <div class="badge-wrapper">
+      <div class="badge-senai">
+        <span class="badge-dot"></span>
+        FIRJAN SENAI SESI • TURMA 992 • JOGOS DIGITAIS
+      </div>
+    </div>
+
+    <!-- Cabeçalho Principal -->
+    <header>
+      <h1>Segunda Atividade: Dominando Branches no Git</h1>
+      <p class="subtitle">Aprenda a trabalhar em paralelo criando sua própria ramificação de desenvolvimento de forma segura e colaborativa.</p>
+    </header>
+
+    <!-- Card de Conceito Rápido -->
+    <section class="concept-card">
+      <div class="concept-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="6" y1="3" x2="6" y2="15"></line>
+          <circle cx="18" cy="6" r="3"></circle>
+          <circle cx="6" cy="18" r="3"></circle>
+          <path d="M18 9a9 9 0 0 1-9 9"></path>
+        </svg>
+        O que é uma Branch?
+      </div>
+      <p class="concept-text">
+        Uma <strong>branch (ramificação)</strong> é como uma linha do tempo paralela no seu projeto. Ela permite que você crie novos arquivos e funcionalidades livremente, <strong>sem interferir no trabalho dos seus colegas</strong> e mantendo a versão principal (<code>master</code>) protegida e estável até que tudo esteja pronto.
+      </p>
+
+      <!-- Diagrama Visual -->
+      <div class="branch-diagram">
+        <div class="diagram-track">
+          <span class="track-tag tag-master">branch: master</span>
+          <div class="diagram-line">
+            <span class="node master" title="Commit Base"></span>
+            <span class="seg"></span>
+            <span class="node master" title="Commit Master"></span>
+            <span class="seg"></span>
+            <span class="node master" title="Commit Atual"></span>
+          </div>
+        </div>
+        <div class="diagram-track">
+          <span class="track-tag tag-branch">sua branch</span>
+          <div class="diagram-line">
+            <span style="width: 28px;"></span>
+            <span style="color: var(--accent-green); font-size: 1rem; margin-right: 4px;">↳</span>
+            <span class="seg green"></span>
+            <span class="node feature" title="Seu Arquivo de Entrega"></span>
+            <span class="seg green"></span>
+            <span class="node feature" title="Seu Commit da Atividade"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gerador Interativo de Nome de Branch -->
+    <section class="generator-card">
+      <div class="generator-header">
+        <span class="generator-icon">⚡</span>
+        <div>
+          <h2 class="generator-title">Assistente de Nomenclatura da sua Branch</h2>
+          <p class="generator-desc">Digite seu primeiro nome e sobrenome para gerar automaticamente os comandos customizados com o seu nome:</p>
+        </div>
+      </div>
+      <div class="generator-input-group">
+        <input type="text" id="inputFirstName" class="input-field" placeholder="Ex: Felipe" oninput="updateCustomBranch()">
+        <input type="text" id="inputLastName" class="input-field" placeholder="Ex: Carreiro" oninput="updateCustomBranch()">
+      </div>
+    </section>
+
+    <!-- Guia Passo a Passo -->
+    <main class="steps-wrapper">
+
+      <!-- PASSO 1 -->
+      <article class="step-card" id="step1">
+        <div class="step-header">
+          <div class="step-number">1</div>
+          <h2 class="step-title">Sincronizar o Repositório Local</h2>
+        </div>
+        <p class="step-description">
+          Antes de criar qualquer branch, você deve sempre garantir que está na branch principal (<code>master</code>) e baixar as últimas alterações enviadas pelo professor e colegas de turma.
+        </p>
+
+        <div class="terminal-box">
+          <div class="terminal-topbar">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <span class="terminal-label">git-bash / terminal</span>
+            <button class="copy-btn" onclick="copyCode(this, 'git checkout master\ngit pull')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copiar</span>
+            </button>
+          </div>
+          <div class="code-content">
+            <div class="code-line">
+              <span class="prompt-symbol">$</span>
+              <span><span class="cmd-highlight">git</span> checkout master</span>
+            </div>
+            <div class="code-line">
+              <span class="prompt-symbol">$</span>
+              <span><span class="cmd-highlight">git</span> pull</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <span>💡</span>
+          <div><strong>Por que fazer isso?</strong> O <code>git pull</code> atualiza seu computador com o repositório do GitHub. Criar sua branch a partir de uma master atualizada evita conflitos de versão mais tarde!</div>
+        </div>
+      </article>
+
+      <!-- PASSO 2 -->
+      <article class="step-card" id="step2">
+        <div class="step-header">
+          <div class="step-number">2</div>
+          <h2 class="step-title">Criar e Entrar na sua Nova Branch</h2>
+        </div>
+        <p class="step-description">
+          Utilize o parâmetro <code>-b</code> para criar a branch e já alternar automaticamente para ela. O padrão de nome para esta aula é <code>atividade2-seunome-seusobrenome</code>.
+        </p>
+
+        <div class="terminal-box">
+          <div class="terminal-topbar">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <span class="terminal-label">Comando Personalizado</span>
+            <button class="copy-btn" id="btnCopyStep2" onclick="copyCode(this, getStep2Command())">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copiar</span>
+            </button>
+          </div>
+          <div class="code-content">
+            <div class="code-line">
+              <span class="prompt-symbol">$</span>
+              <span id="cmdStep2"><span class="cmd-highlight">git</span> checkout <span class="flag-highlight">-b</span> <span class="param-highlight">atividade2-seunome-seusobrenome</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-tip">
+          <span>⚠️</span>
+          <div>
+            <strong>Regra de Ouro da Nomenclatura:</strong> Use apenas <strong>letras minúsculas</strong>, sem espaços e <strong>sem acentos ou caracteres especiais</strong>. Separe as palavras com traço (<code>-</code>).<br>
+            <em>Exemplo:</em> <code>git checkout -b atividade2-felipe-carreiro</code>
+          </div>
+        </div>
+      </article>
+
+      <!-- PASSO 3 -->
+      <article class="step-card" id="step3">
+        <div class="step-header">
+          <div class="step-number">3</div>
+          <h2 class="step-title">Criar seu Arquivo de Entrega</h2>
+        </div>
+        <p class="step-description">
+          Abra o projeto no VS Code (ou explorador de arquivos) e localize a pasta <strong><code>Segunda Atividade/</code></strong>. Crie um arquivo de texto com o seu nome completo.
+        </p>
+
+        <div style="background: var(--bg-surface); padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 16px; font-size: 0.95rem;">
+          <div style="margin-bottom: 6px;">📂 <strong>Local da pasta:</strong> <code>Segunda Atividade/</code></div>
+          <div>📄 <strong>Nome do arquivo:</strong> <code id="fileNameDisplay">Seu Nome Completo.txt</code></div>
+        </div>
+
+        <p class="step-description" style="margin-bottom: 8px;">
+          <strong>Conteúdo do arquivo (copie e preencha):</strong>
+        </p>
+
+        <div class="terminal-box">
+          <div class="terminal-topbar">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <span class="terminal-label">Estrutura do Texto</span>
+            <button class="copy-btn" id="btnCopyFileContent" onclick="copyCode(this, getFileTemplate())">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copiar Texto</span>
+            </button>
+          </div>
+          <div class="code-content" id="fileContentCode">
+Nome: [Seu Nome Completo]
+Jogo Favorito: [Nome do Jogo]
+Minha Branch: [Nome da sua branch]</div>
+        </div>
+      </article>
+
+      <!-- PASSO 4 -->
+      <article class="step-card" id="step4">
+        <div class="step-header">
+          <div class="step-number">4</div>
+          <h2 class="step-title">Salvar e Fazer o Commit</h2>
+        </div>
+        <p class="step-description">
+          Agora adicione o arquivo criado à área de preparação (<em>staging area</em>) e registre o seu commit com uma mensagem clara de identificação.
+        </p>
+
+        <div class="terminal-box">
+          <div class="terminal-topbar">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <span class="terminal-label">git-bash / terminal</span>
+            <button class="copy-btn" id="btnCopyStep4" onclick="copyCode(this, getStep4Command())">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copiar</span>
+            </button>
+          </div>
+          <div class="code-content">
+            <div class="code-line">
+              <span class="prompt-symbol">$</span>
+              <span><span class="cmd-highlight">git</span> add .</span>
+            </div>
+            <div class="code-line">
+              <span class="prompt-symbol">$</span>
+              <span id="cmdStep4"><span class="cmd-highlight">git</span> commit <span class="flag-highlight">-m</span> <span class="string-highlight">"Entrega Atividade 2 - [Seu Nome]"</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <span>📝</span>
+          <div><strong>O que isso faz?</strong> O <code>git add .</code> prepara todos os arquivos modificados. O <code>git commit</code> cria um ponto na história da sua branch com a sua mensagem.</div>
+        </div>
+      </article>
+
+      <!-- PASSO 5 -->
+      <article class="step-card" id="step5">
+        <div class="step-header">
+          <div class="step-number">5</div>
+          <h2 class="step-title">Enviar a Branch para o GitHub (Push)</h2>
+        </div>
+        <p class="step-description">
+          Envie sua branch e seu commit para o repositório remoto no GitHub. Como é a primeira vez que você está enviando esta branch, usamos a flag <code>-u origin</code>.
+        </p>
+
+        <div class="terminal-box">
+          <div class="terminal-topbar">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <span class="terminal-label">Comando de Envio</span>
+            <button class="copy-btn" id="btnCopyStep5" onclick="copyCode(this, getStep5Command())">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copiar</span>
+            </button>
+          </div>
+          <div class="code-content">
+            <div class="code-line">
+              <span class="prompt-symbol">$</span>
+              <span id="cmdStep5"><span class="cmd-highlight">git</span> push <span class="flag-highlight">-u</span> origin <span class="param-highlight">atividade2-seunome-seusobrenome</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-success">
+          <span>🚀</span>
+          <div>
+            <strong>O que significa <code>-u origin</code>?</strong> Estabelece uma conexão permanente (<em>upstream tracking</em>) entre a sua branch no computador e a nova branch criada no GitHub.
+          </div>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- Checklist Final & Verificação -->
+    <section class="checklist-section">
+      <h2 class="checklist-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        Checklist de Conclusão da Atividade
+      </h2>
+      <p class="checklist-subtitle">Clique nos passos conforme você for completando para acompanhar o seu progresso:</p>
+
+      <div class="progress-box">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+        <div class="progress-info">
+          <span id="progressText">0 de 5 etapas concluídas</span>
+          <span id="progressPercent">0%</span>
+        </div>
+      </div>
+
+      <div class="checklist-items">
+        <div class="checklist-item" onclick="toggleChecklist(this)">
+          <div class="checklist-checkbox">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="checklist-text">
+            <strong>Passo 1:</strong> Dei <code>git checkout master</code> e <code>git pull</code> para atualizar o repositório.
+          </div>
+        </div>
+
+        <div class="checklist-item" onclick="toggleChecklist(this)">
+          <div class="checklist-checkbox">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="checklist-text">
+            <strong>Passo 2:</strong> Criei minha branch com <code>git checkout -b atividade2-meunome-meusobrenome</code>.
+          </div>
+        </div>
+
+        <div class="checklist-item" onclick="toggleChecklist(this)">
+          <div class="checklist-checkbox">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="checklist-text">
+            <strong>Passo 3:</strong> Criei o arquivo <code>Seu Nome Completo.txt</code> dentro da pasta <code>Segunda Atividade/</code> com as informações preenchidas.
+          </div>
+        </div>
+
+        <div class="checklist-item" onclick="toggleChecklist(this)">
+          <div class="checklist-checkbox">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="checklist-text">
+            <strong>Passo 4:</strong> Adicionei e commitei com <code>git add .</code> e <code>git commit -m "..."</code>.
+          </div>
+        </div>
+
+        <div class="checklist-item" onclick="toggleChecklist(this)">
+          <div class="checklist-checkbox">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="checklist-text">
+            <strong>Passo 5:</strong> Enviei para o GitHub com <code>git push -u origin sua-branch</code>.
+          </div>
+        </div>
+      </div>
+
+      <!-- Dicas de Ouro -->
+      <div style="margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border-subtle);">
+        <h3 style="font-size: 1.1rem; margin-bottom: 12px; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+          <span>🔍</span> Como ter certeza de que deu tudo certo?
+        </h3>
+        <ul style="padding-left: 20px; color: #cbd5e1; font-size: 0.95rem; line-height: 1.7;">
+          <li>Digite <code>git branch</code> no terminal: a sua branch deve estar destacada em verde com um asterisco (<code>*</code>).</li>
+          <li>Digite <code>git status</code>: o terminal deve informar <em>"nothing to commit, working tree clean"</em>.</li>
+          <li>Acesse a página do repositório no GitHub no navegador: abra o menu dropdown de branches (onde diz <code>master</code>) e confirme que a sua branch <code>atividade2-...</code> está listada lá! 🎉</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer>
+      <p>Material didático desenvolvido para o curso de <strong>Jogos Digitais • FIRJAN SENAI SESI</strong></p>
+      <p style="margin-top: 4px; font-size: 0.8rem; color: var(--text-dim);">Turma 992 • Controle de Versão com Git & GitHub</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Sanitização e formatação de slug
+    function sanitizeSlug(str) {
+      if (!str) return '';
+      return str
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+    }
+
+    function getFormattedBranchName() {
+      const first = sanitizeSlug(document.getElementById('inputFirstName').value.trim());
+      const last = sanitizeSlug(document.getElementById('inputLastName').value.trim());
+      if (first && last) {
+        return `atividade2-${first}-${last}`;
+      } else if (first) {
+        return `atividade2-${first}`;
+      }
+      return 'atividade2-seunome-seusobrenome';
+    }
+
+    function getFullName() {
+      const first = document.getElementById('inputFirstName').value.trim();
+      const last = document.getElementById('inputLastName').value.trim();
+      if (first && last) {
+        return `${first} ${last}`;
+      } else if (first) {
+        return first;
+      }
+      return '[Seu Nome Completo]';
+    }
+
+    function updateCustomBranch() {
+      const branchName = getFormattedBranchName();
+      const fullName = getFullName();
+
+      // Passo 2
+      document.getElementById('cmdStep2').innerHTML = 
+        `<span class="cmd-highlight">git</span> checkout <span class="flag-highlight">-b</span> <span class="param-highlight">${branchName}</span>`;
+
+      // Passo 3
+      document.getElementById('fileNameDisplay').textContent = `${fullName === '[Seu Nome Completo]' ? 'Seu Nome Completo' : fullName}.txt`;
+      
+      document.getElementById('fileContentCode').textContent = 
+`Nome: ${fullName}
+Jogo Favorito: [Nome do Jogo]
+Minha Branch: ${branchName}`;
+
+      // Passo 4
+      document.getElementById('cmdStep4').innerHTML = 
+        `<span class="cmd-highlight">git</span> commit <span class="flag-highlight">-m</span> <span class="string-highlight">"Entrega Atividade 2 - ${fullName}"</span>`;
+
+      // Passo 5
+      document.getElementById('cmdStep5').innerHTML = 
+        `<span class="cmd-highlight">git</span> push <span class="flag-highlight">-u</span> origin <span class="param-highlight">${branchName}</span>`;
+    }
+
+    function getStep2Command() {
+      return `git checkout -b ${getFormattedBranchName()}`;
+    }
+
+    function getStep4Command() {
+      const fullName = getFullName();
+      return `git add .\ngit commit -m "Entrega Atividade 2 - ${fullName}"`;
+    }
+
+    function getStep5Command() {
+      return `git push -u origin ${getFormattedBranchName()}`;
+    }
+
+    function getFileTemplate() {
+      const fullName = getFullName();
+      const branchName = getFormattedBranchName();
+      return `Nome: ${fullName}\nJogo Favorito: [Nome do Jogo]\nMinha Branch: ${branchName}`;
+    }
+
+    // Copiar código com feedback visual
+    function copyCode(btn, text) {
+      if (!navigator.clipboard) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showCopyFeedback(btn);
+        return;
+      }
+
+      navigator.clipboard.writeText(text).then(() => {
+        showCopyFeedback(btn);
+      }).catch(err => {
+        console.error('Erro ao copiar:', err);
+      });
+    }
+
+    function showCopyFeedback(btn) {
+      const originalHTML = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.innerHTML = `
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span>Copiado!</span>
+      `;
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = originalHTML;
+      }, 2000);
+    }
+
+    // Checklist interativo
+    function toggleChecklist(item) {
+      item.classList.toggle('checked');
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const total = document.querySelectorAll('.checklist-item').length;
+      const checked = document.querySelectorAll('.checklist-item.checked').length;
+      const percentage = Math.round((checked / total) * 100);
+
+      document.getElementById('progressBar').style.width = percentage + '%';
+      document.getElementById('progressText').textContent = `${checked} de ${total} etapas concluídas`;
+      document.getElementById('progressPercent').textContent = percentage + '%';
+    }
+  </script>
+</body>
+</html>
